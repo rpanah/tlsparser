@@ -1,7 +1,6 @@
 BINARY=tlsparser
-#INCLUDE=-I/opt/local/include/glib-2.0/
 CFLAGS=`pkg-config --cflags glib-2.0`
-LIBS=-L/opt/local/lib/ -lglib-2.0.0
+LIBS=`pkg-config --libs glib-2.0`
 CC=gcc
 
 main: main.c tls_constants.h tls_handshake.o tls_handshake.h utils.o utils.h tls_ciphers.o tls_ciphers.h tls_extensions.o tls_extensions.h
