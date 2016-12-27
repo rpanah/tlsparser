@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <glib.h>
 #include "tls_constants.h"
 #include "tls_handshake.h"
 #include "utils.h"
@@ -15,8 +16,12 @@
 int main(int argc, char **argv)
 {
     FILE *f;
-    unsigned char buffer[10000];
-    int buffer_size = 0;
+    unsigned char *raw_buffer = (unsigned char *)malloc(sizeof(unsigned char) * 10000);
+    guchar *decoded = NULL;
+    gsize *decoded_len = (gsize *)malloc(sizeof(gsize));
+    unsigned long raw_buffer_size = 0;
+    unsigned char *buffer = NULL;
+    unsigned long buffer_size = 0;
     int i;
     int version = 0;
     int record_type = 0;
@@ -38,8 +43,23 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    buffer_size = fread(buffer, 1, 10000, f);
-    printf("Input read (%d bytes): \n", buffer_size);
+    raw_buffer_size = fread(raw_buffer, 1, 10000, f);
+
+    decoded = g_base64_decode((const char *)raw_buffer, decoded_len);
+    if (decoded == NULL || *decoded_len <= 0)
+    {
+        //printf("Input not base64.\n");
+        buffer = raw_buffer;
+        buffer_size = raw_buffer_size;
+    }
+    else
+    {
+        printf("Base64 decoded (len: %lu).\n", *decoded_len);
+        buffer = (unsigned char *)decoded;
+        buffer_size = *decoded_len;
+    }
+
+    printf("Input read (%lu bytes): \n", buffer_size);
     for(i = 0; i < buffer_size; i++)
         printf("%c", buffer[i]);
     printf("\n");
@@ -73,7 +93,7 @@ int main(int argc, char **argv)
 
     if (record_length != buffer_size - TLS_HEADER_LEN)
     {
-        fprintf(stderr, "ERROR: Record length (%d) doesn't match the data (%d).\n", record_length, buffer_size - TLS_HEADER_LEN);
+        fprintf(stderr, "ERROR: Record length (%d) doesn't match the data (%lu).\n", record_length, buffer_size - TLS_HEADER_LEN);
         exit(1);
     }
 
