@@ -11,5 +11,6 @@ struct handshake_message
 
 struct handshake_message *process_handshake(void *buffer, int buffer_length);
 struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length);
+struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length);
 
 #endif /* __TLS_HANDSHAKE_H */
