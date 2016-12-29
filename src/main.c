@@ -12,6 +12,7 @@
 #include "tls_constants.h"
 #include "tls_handshake.h"
 #include "utils.h"
+#include "x509_cert.h"
 
 int main(int argc, char **argv)
 {
@@ -45,6 +46,11 @@ int main(int argc, char **argv)
 
     raw_buffer_size = fread(raw_buffer, 1, 10000, f);
 
+    if (print_x509_cert(raw_buffer, raw_buffer_size) == TRUE)
+    {
+        return 0;
+    }
+
     decoded = g_base64_decode((const char *)raw_buffer, decoded_len);
     if (decoded == NULL || *decoded_len <= 0)
     {
@@ -58,6 +64,7 @@ int main(int argc, char **argv)
         buffer = (unsigned char *)decoded;
         buffer_size = *decoded_len;
     }
+
 
     printf("Input read (%lu bytes): \n", buffer_size);
     for(i = 0; i < buffer_size; i++)

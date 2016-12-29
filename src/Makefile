@@ -1,10 +1,10 @@
 BINARY=tlsparser
-CFLAGS=`pkg-config --cflags glib-2.0`
-LIBS=`pkg-config --libs glib-2.0`
+CFLAGS=`pkg-config --cflags glib-2.0` `pkg-config --cflags openssl`
+LIBS=`pkg-config --libs glib-2.0` `pkg-config --libs openssl`
 CC=gcc
 
-main: main.c tls_constants.h tls_handshake.o tls_handshake.h utils.o utils.h tls_ciphers.o tls_ciphers.h tls_extensions.o tls_extensions.h
-	$(CC) -o $(BINARY) $(CFLAGS) main.c tls_handshake.o tls_ciphers.o utils.o tls_extensions.o $(LIBS)
+main: main.c tls_constants.h tls_handshake.o tls_handshake.h utils.o utils.h tls_ciphers.o tls_ciphers.h tls_extensions.o tls_extensions.h x509_cert.o x509_cert.h
+	$(CC) -o $(BINARY) $(CFLAGS) main.c tls_handshake.o tls_ciphers.o utils.o tls_extensions.o x509_cert.o $(LIBS)
 
 tls_handshake.o: tls_handshake.c tls_handshake.h utils.h tls_ciphers.h tls_compressions.h tls_extensions.h
 	$(CC) -c $(CFLAGS) -o tls_handshake.o tls_handshake.c
@@ -17,6 +17,9 @@ tls_ciphers.o: tls_ciphers.c tls_ciphers.h
 
 tls_extensions.o: tls_extensions.c tls_extensions.h
 	$(CC) -c $(CFLAGS) -o tls_extensions.o tls_extensions.c
+
+x509_cert.o: x509_cert.c x509_cert.h
+	$(CC) -c $(CFLAGS) -o x509_cert.o x509_cert.c
 
 clean:
 	rm *.o $(BINARY)
