@@ -51,7 +51,7 @@ unsigned long long read_ulonglong(void *_buffer, unsigned offset, unsigned size)
 unsigned read_int(void *_buffer, unsigned offset, unsigned size)
 {
     unsigned i = 0;
-    int result = 0;
+    unsigned result = 0;
     unsigned char *buffer = _buffer;
     if (sizeof(result) < size)
     {
@@ -61,6 +61,29 @@ unsigned read_int(void *_buffer, unsigned offset, unsigned size)
     for (i = offset; i < offset + size; i++)
         result = (result << 8) | buffer[i];
     return result;
+}
+
+void print_hex_blob(void *_buffer, unsigned offset, unsigned size, unsigned short tabs, unsigned short spacing)
+{
+    unsigned i = 0;
+    unsigned char *buffer = _buffer;
+    const int line_break = 16;
+
+    for (i = offset; i < offset + size; i++) {
+        if (spacing && (i - offset) % line_break == 0) {
+            printf("\n");
+            print_tabs(tabs);
+        }
+        printf("%02x:", (unsigned int)(buffer[i]));
+    }
+    if (spacing)
+        printf("\n");
+}
+
+void print_tabs(unsigned tabs) {
+    int i = 0;
+    for (i = 0; i < tabs; i++)
+        printf("\t");
 }
 
 const char *epoch_to_string(time_t in_time)
