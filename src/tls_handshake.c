@@ -73,8 +73,6 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     unsigned char *buffer = data;
     unsigned tls_version = 0;
     unsigned session_id_length = 0;
-    unsigned long long session_id = 0;
-    unsigned random = 0;
     unsigned cipher_suites_pos = 0;
     unsigned cipher_suites_length = 0;
     unsigned cipher_suites_start = 0;
@@ -92,9 +90,19 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     unsigned extensions_end = 0;
 
     tls_version = read_uint(buffer, HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
-    random = read_uint(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN);
+    printf("Random:");
+    print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
     session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
-    session_id = read_ulonglong(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length);
+    if (session_id_length)
+    {
+        printf("Session ID length: %d\n", session_id_length);
+        printf("Session ID:");
+        print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+    }
+    else
+    {
+        printf("No session ID specified.\n");
+    }
     cipher_suites_pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
     cipher_suites_length = read_uint(buffer, cipher_suites_pos, HANDSHAKE_CH_CIPHERS_LENGTH_LEN);
 
@@ -118,18 +126,6 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     }
     printf("\n");
 
-    printf("Random: %u\n", random);
-    printf("Date from random: %s\n", epoch_to_string(random));
-
-    if (session_id_length)
-    {
-        printf("Session ID length: %d\n", session_id_length);
-        printf("Session ID: %llu\n", session_id);
-    }
-    else
-    {
-        printf("No session ID specified.\n");
-    }
 
     printf("Cipher suites length: %d\n", cipher_suites_length);
     cipher_suites_start = cipher_suites_pos + HANDSHAKE_CH_CIPHERS_LENGTH_LEN;
@@ -302,8 +298,6 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     unsigned char *buffer = data;
     unsigned tls_version = 0;
     unsigned session_id_length = 0;
-    unsigned long long session_id = 0;
-    unsigned random = 0;
     unsigned cipher_suites_pos = 0;
     unsigned pos = 0;
 
@@ -318,9 +312,19 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     unsigned extensions_end = 0;
 
     tls_version = read_uint(buffer, HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
-    random = read_uint(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN);
+    printf("Random:");
+    print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
     session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
-    session_id = read_ulonglong(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length);
+    if (session_id_length)
+    {
+        printf("Session ID length: %d\n", session_id_length);
+        printf("Session ID:");
+        print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+    }
+    else
+    {
+        printf("No session ID specified.\n");
+    }
     cipher_suites_pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
 
     printf("TLS version: ");
@@ -342,19 +346,6 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
             printf("unknown (%d)", tls_version);
     }
     printf("\n");
-
-    printf("Random: %u\n", random);
-    printf("Date from random: %s\n", epoch_to_string(random));
-
-    if (session_id_length)
-    {
-        printf("Session ID length: %d\n", session_id_length);
-        printf("Session ID: %llu\n", session_id);
-    }
-    else
-    {
-        printf("No session ID specified.\n");
-    }
     pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
 
     printf("Cipher suite:");
