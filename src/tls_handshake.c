@@ -193,9 +193,9 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         unsigned extension_id = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_ID_LEN);
         pos += HANDSHAKE_CH_EXTENSION_ID_LEN;
         unsigned extension_data_length = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN);
-        pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN + extension_data_length;
+        pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN;
         /* printf("%#04x ", cipher); */
-        char *name = extension_name(extension_id);
+        const char *name = extension_name(extension_id);
         printf("\t%s (id = %d len = %d))\n", name, extension_id, extension_data_length);
         switch (extension_id)
         {
@@ -204,7 +204,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 continue;
 
             case EXT_SERVER_NAME:
-                /* parse_sni((char *)buffer, pos - extension_data_length, extension_data_length); */
+                parse_sni((char *)buffer, pos, extension_data_length);
                 break;
 
             case EXT_MAX_FRAGMENT_LENGTH:
@@ -235,9 +235,11 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 break;
 
             case EXT_SUPPORTED_GROUPS:
+                parse_supported_groups((char *) buffer, pos, extension_data_length);
                 break;
 
             case EXT_EC_POINT_FORMATS:
+                parse_point_formats((char *) buffer, pos, extension_data_length);
                 break;
 
             case EXT_SRP:
@@ -288,6 +290,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             case EXT_RENEGOTIATION_INFO:
                 break;
         }
+        pos += extension_data_length;
     }
 
     return 0;
@@ -392,9 +395,9 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         unsigned extension_id = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_ID_LEN);
         pos += HANDSHAKE_CH_EXTENSION_ID_LEN;
         unsigned extension_data_length = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN);
-        pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN + extension_data_length;
+        pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN;
         /* printf("%#04x ", cipher); */
-        char *name = extension_name(extension_id);
+        const char *name = extension_name(extension_id);
         printf("\t%s (id = %d len = %d))\n", name, extension_id, extension_data_length);
         switch (extension_id)
         {
@@ -403,7 +406,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 continue;
 
             case EXT_SERVER_NAME:
-                /* parse_sni((char *)buffer, pos - extension_data_length, extension_data_length); */
+                parse_sni((char *)buffer, pos, extension_data_length);
                 break;
 
             case EXT_MAX_FRAGMENT_LENGTH:
@@ -434,9 +437,11 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_SUPPORTED_GROUPS:
+                parse_supported_groups((char *)buffer, pos, extension_data_length);
                 break;
 
             case EXT_EC_POINT_FORMATS:
+                parse_point_formats((char *)buffer, pos, extension_data_length);
                 break;
 
             case EXT_SRP:
@@ -487,6 +492,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
             case EXT_RENEGOTIATION_INFO:
                 break;
         }
+        pos += extension_data_length;
     }
 
     return 0;
