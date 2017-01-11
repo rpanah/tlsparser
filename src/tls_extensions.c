@@ -1,9 +1,13 @@
+#include "tls_constants.h"
 #include "tls_extensions.h"
+#include "ec_extensions.h"
+#include "utils.h"
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-char *extension_name(unsigned code)
+const char *extension_name(unsigned code)
 {
     switch (code)
     {
@@ -127,15 +131,43 @@ char *extension_name(unsigned code)
 
 struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length)
 {
-    char *sni = (char *)(malloc(length + 1));
-    unsigned i = 0;
-    printf("\t\tSNI: ");
-    for (i = offset; i < offset + length; i++)
+    unsigned i = offset;
+    unsigned j = 0;
+    unsigned name_list_length = read_uint(data, offset, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
+    unsigned name_index = 0;
+    unsigned name_type;
+    unsigned name_length;
+
+    i += HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
+
+    for (; i < offset + length;)
     {
-        sni[i] = data[i];
-        printf("%c", data[i]);
+        name_type = read_uint(data, i, SNI_TYPE_LENGTH);
+        i += SNI_TYPE_LENGTH;
+
+        name_length = read_uint(data, i, SNI_NAME_LENGTH_LEN);
+        i+= SNI_NAME_LENGTH_LEN;
+
+        printf("\t\t[%d]: (type: %s, length: %u) ", name_index, sni_type_name(name_type), name_length);
+        for (j = 0; j < name_length; j++, i++)
+            printf("%c", data[i]);
+
+        name_index++;
+        printf("\n");
     }
-    sni[length] = '\0';
-    printf("\n");
     return 0;
+}
+
+const char *sni_type_name(unsigned code)
+{
+    switch (code)
+    {
+        default:
+            return "SNI_UNKNOWN_TYPE";
+            break;
+
+        case SNI_TYPE_HOSTNAME:
+            return "SNI_HOSTNAME";
+            break;
+    }
 }

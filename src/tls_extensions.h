@@ -1,7 +1,10 @@
 #ifndef __TLS_EXTENSIONS_H
 #define __TLS_EXTENSIONS_H
 
-char *extension_name(unsigned extension_id);
+#include "ec_extensions.h"
+
+const char *extension_name(unsigned extension_id);
+const char *sni_type_name(unsigned code);
 struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length);
 
 #define EXT_SERVER_NAME                                 0
@@ -32,5 +35,9 @@ struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length);
 #define EXT_CACHED_INFO                                 25
 #define EXT_SESSION_TICKET_TLS                          35
 #define EXT_RENEGOTIATION_INFO                          65281
+
+#define SNI_TYPE_LENGTH                                 1
+#define SNI_NAME_LENGTH_LEN                             2
+#define SNI_TYPE_HOSTNAME                               0
 
 #endif /* __TLS_EXTENSIONS_H */
