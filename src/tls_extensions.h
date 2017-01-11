@@ -2,6 +2,7 @@
 #define __TLS_EXTENSIONS_H
 
 #include "ec_extensions.h"
+#include "alpn_extension.h"
 
 const char *extension_name(unsigned extension_id);
 const char *sni_type_name(unsigned code);
