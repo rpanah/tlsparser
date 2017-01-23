@@ -343,7 +343,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         {
             default:
                 fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
-                continue;
+                break;
 
             case EXT_SERVER_NAME:
                 parse_sni((char *)buffer, pos, extension_data_length, json);
@@ -632,7 +632,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         {
             default:
                 fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
-                continue;
+                break;
 
             case EXT_SERVER_NAME:
                 parse_sni((char *)buffer, pos, extension_data_length, json);
