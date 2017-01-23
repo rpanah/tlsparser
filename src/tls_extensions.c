@@ -129,7 +129,7 @@ const char *extension_name(unsigned code)
     }
 }
 
-struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length)
+struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json)
 {
     unsigned i = offset;
     unsigned j = 0;
@@ -140,21 +140,40 @@ struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length)
 
     i += HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
 
+    if (json)
+        printf("\"sni_list\": [");
+
     for (; i < offset + length;)
     {
+        if (json)
+        {
+            if (name_index != 0)
+                printf(", ");
+            printf("{");
+        }
+
         name_type = read_uint(data, i, SNI_TYPE_LENGTH);
         i += SNI_TYPE_LENGTH;
 
         name_length = read_uint(data, i, SNI_NAME_LENGTH_LEN);
         i+= SNI_NAME_LENGTH_LEN;
 
-        printf("\t\t[%d]: (type: %s, length: %u) ", name_index, sni_type_name(name_type), name_length);
+        if (json)
+            printf("\"sni_type_name\": \"%s\", \"name_length\": %d, \"name\": \"", sni_type_name(name_type), name_length);
+        else
+            printf("\t\t[%d]: (type: %s, length: %u) ", name_index, sni_type_name(name_type), name_length);
+
         for (j = 0; j < name_length; j++, i++)
             printf("%c", data[i]);
 
         name_index++;
-        printf("\n");
+        if (json)
+            printf("\"}");
+        else
+            printf("\n");
     }
+    if (json)
+        printf("]");
     return 0;
 }
 

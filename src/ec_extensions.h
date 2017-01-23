@@ -1,10 +1,10 @@
 #ifndef __EC_EXTENSIONS_H
 #define __EC_EXTENSIONS_H
 
-void parse_supported_groups(char *data, unsigned offset, unsigned length);
+void parse_supported_groups(char *data, unsigned offset, unsigned length, int json);
 const char *ec_named_curve_name(unsigned code);
 
-void parse_point_formats(char *data, unsigned offset, unsigned length);
+void parse_point_formats(char *data, unsigned offset, unsigned length, int json);
 const char *ec_point_format_name(unsigned code);
 
 #define EC_CURVE_SET_LENGTH             2

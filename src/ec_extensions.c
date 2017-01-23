@@ -2,18 +2,29 @@
 #include "utils.h"
 #include <stdio.h>
 
-void parse_supported_groups(char *data, unsigned offset, unsigned length)
+void parse_supported_groups(char *data, unsigned offset, unsigned length, int json)
 {
     unsigned pos = offset;
     unsigned curves_length = read_uint(data, pos, EC_CURVE_SET_LENGTH);
     unsigned curve_code;
+    int i = 0;
     pos += EC_CURVE_SET_LENGTH;
 
-    for(pos; pos < offset + length; pos += EC_CURVE_LENGTH)
+    if (json)
+        printf("\"supported_group_list\": [");
+    for(; pos < offset + length; pos += EC_CURVE_LENGTH)
     {
+        if (json && i != 0)
+            printf(", ");
         curve_code = read_uint(data, pos, EC_CURVE_LENGTH);
-        printf("\t\t%s\n", ec_named_curve_name(curve_code));
+        if (json)
+            printf("{\"name\": \"%s\", \"code\": \"%#.04x\"}", ec_named_curve_name(curve_code), curve_code);
+        else
+            printf("\t\t%s\n", ec_named_curve_name(curve_code));
+        i++;
     }
+    if (json)
+        printf("]");
 }
 
 const char *ec_named_curve_name(unsigned code)
@@ -109,18 +120,29 @@ const char *ec_named_curve_name(unsigned code)
     }
 }
 
-void parse_point_formats(char *data, unsigned offset, unsigned length)
+void parse_point_formats(char *data, unsigned offset, unsigned length, int json)
 {
     unsigned pos = offset;
     unsigned point_formats_length = read_uint(data, pos, EC_POINT_FORMAT_SET_LENGTH);
     unsigned point_format_code;
+    int i = 0;
     pos += EC_POINT_FORMAT_SET_LENGTH;
 
-    for(pos; pos < offset + length; pos += EC_POINT_FORMAT_LENGTH)
+    if (json)
+        printf("\"point_format_list\": [");
+    for(; pos < offset + length; pos += EC_POINT_FORMAT_LENGTH)
     {
+        if (json && i != 0)
+            printf(", ");
         point_format_code = read_uint(data, pos, EC_POINT_FORMAT_LENGTH);
-        printf("\t\t%s\n", ec_point_format_name(point_format_code));
+        if (json)
+            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", ec_point_format_name(point_format_code), point_format_code);
+        else
+            printf("\t\t%s\n", ec_point_format_name(point_format_code));
+        i++;
     }
+    if(json)
+        printf("]");
 }
 
 const char *ec_point_format_name(unsigned code)

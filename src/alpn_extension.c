@@ -4,26 +4,48 @@
 #include <stdlib.h>
 #include <string.h>
 
-void parse_alpns(char *data, unsigned offset, unsigned length)
+void parse_alpns(char *data, unsigned offset, unsigned length, int json)
 {
     unsigned pos = offset;
     unsigned alpns_length = read_uint(data, pos, ALPN_SET_LENGTH);
     unsigned alpn_code_length;
+    int i = 0;
     pos += ALPN_SET_LENGTH;
 
-    for(pos; pos < offset + length;)
+    if (json)
+        printf("\"alpn_list\": [");
+    for(; pos < offset + length;)
     {
         alpn_code_length = read_uint(data, pos, ALPN_LENGTH);
         pos += ALPN_LENGTH;
         char *alpn_code = (char *)malloc(sizeof(char) * alpn_code_length + 1);
         memcpy(alpn_code, data + pos, alpn_code_length);
         alpn_code[alpn_code_length] = '\0';
-        printf("\t\t%s", alpn_code);//alpn_name(alpn_code));
+        if (json)
+        {
+            if (i != 0)
+                printf(", ");
+            printf("{\"code\": \"%s\"", alpn_code);
+        }
+        else
+            printf("\t\t%s", alpn_code);//alpn_name(alpn_code));
+
         if (alpn_desc(alpn_code))
-            printf(" (%s)", alpn_desc(alpn_code));
-        printf("\n");
+        {
+            if (json)
+                printf(", \"description\": \"%s\"", alpn_desc(alpn_code));
+            else
+                printf(" (%s)", alpn_desc(alpn_code));
+        }
+        if (json)
+            printf("}");
+        else
+            printf("\n");
         pos += alpn_code_length;
+        i++;
     }
+    if (json)
+        printf("]");
 }
 
 const char *alpn_desc(char *code)

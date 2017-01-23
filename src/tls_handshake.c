@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-struct handshake_message *process_handshake(void *data, int buffer_length)
+struct handshake_message *process_handshake(void *data, int buffer_length, int json)
 {
     unsigned char *buffer = data;
     unsigned handshake_type = 0;
@@ -15,8 +15,16 @@ struct handshake_message *process_handshake(void *data, int buffer_length)
 
     handshake_type = read_uint(buffer, HANDSHAKE_TYPE_OFFSET, HANDSHAKE_TYPE_LEN);
     handshake_length = read_uint(buffer, HANDSHAKE_LENGTH_OFFSET, HANDSHAKE_LENGTH_LEN);
-    printf("Handshake length: %d\n", handshake_length);
-    printf("Handshake type: ");
+    if (!json)
+    {
+        printf("Handshake length: %d\n", handshake_length);
+    }
+
+    if (json)
+        printf("\"handshake_type\": \"");
+    else
+        printf("Handshake type: ");
+
     switch (handshake_type)
     {
         default:
@@ -24,51 +32,80 @@ struct handshake_message *process_handshake(void *data, int buffer_length)
             break;
         case HELLO_REQUEST:
             printf("HELLO_REQUEST");
+            if (json)
+                printf("\"\n");
             break;
         case CLIENT_HELLO:
-            printf("CLIENT_HELLO\n");
-            process_handshake_client_hello(buffer, buffer_length);
+            printf("CLIENT_HELLO");
+            if (json)
+                printf("\", \"handshake_data\": {\n");
+            process_handshake_client_hello(buffer, buffer_length, json);
+            if (json)
+                printf("}\n");
             break;
         case SERVER_HELLO:
-            printf("SERVER_HELLO\n");
-            process_handshake_server_hello(buffer, buffer_length);
+            printf("SERVER_HELLO");
+            if (json)
+                printf("\", \"handshake_data\": {\n");
+            process_handshake_server_hello(buffer, buffer_length, json);
+            if (json)
+                printf("}\n");
             break;
         case NEW_SESSION_TICKET:
             printf("NEW_SESSION_TICKET");
+            if (json)
+                printf("\"\n");
             break;
         case CERTIFICATE:
             printf("CERTIFICATE");
+            if (json)
+                printf("\"\n");
             break;
         case SERVER_KEY_EXCHANGE:
             printf("SERVER_KEY_EXCHANGE");
+            if (json)
+                printf("\"\n");
             break;
         case CERTIFICATE_REQUEST:
             printf("CERTIFICATE_REQUEST");
+            if (json)
+                printf("\"\n");
             break;
         case SERVER_DONE:
             printf("SERVER_DONE");
+            if (json)
+                printf("\"\n");
             break;
         case CERTIFICATE_VERIFY:
             printf("CERTIFICATE_VERIFY");
+            if (json)
+                printf("\"\n");
             break;
         case CLIENT_KEY_EXCHANGE:
             printf("CLIENT_KEY_EXCHANGE");
+            if (json)
+                printf("\"\n");
             break;
         case FINISHED:
             printf("FINISHED");
+            if (json)
+                printf("\"\n");
             break;
         case CERTIFICATE_URL:
             printf("CERTIFICATE_URL");
+            if (json)
+                printf("\"\n");
             break;
         case CERTIFICATE_STATUS:
             printf("CERTIFICATE_STATUS");
+            if (json)
+                printf("\"\n");
             break;
     }
-
     return 0;
 }
 
-struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length)
+struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length, int json)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
@@ -78,6 +115,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     unsigned cipher_suites_start = 0;
     unsigned cipher_suites_end = 0;
     unsigned pos = 0;
+    unsigned i = 0;
 
     unsigned compression_methods_pos = 0;
     unsigned compression_methods_length = 0;
@@ -90,23 +128,49 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     unsigned extensions_end = 0;
 
     tls_version = read_uint(buffer, HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
-    printf("Random:");
-    print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
-    session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
-    if (session_id_length)
+
+    if (json)
     {
-        printf("Session ID length: %d\n", session_id_length);
-        printf("Session ID:");
-        print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+        printf("\"random\": \"");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        printf("\"");
     }
     else
     {
-        printf("No session ID specified.\n");
+        printf("Random:");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
     }
+
+    session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
+    if (session_id_length)
+    {
+        if (json)
+        {
+            printf(",\n\"session_id\": \"");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            printf("\"");
+        }
+        else
+        {
+            printf("Session ID length: %d\n", session_id_length);
+            printf("Session ID:");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+        }
+    }
+    else
+    {
+        if (!json)
+            printf("No session ID specified.\n");
+    }
+
     cipher_suites_pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
     cipher_suites_length = read_uint(buffer, cipher_suites_pos, HANDSHAKE_CH_CIPHERS_LENGTH_LEN);
 
-    printf("TLS version: ");
+    if (json)
+        printf(",\n\"tls_version\": \"");
+    else
+        printf("TLS version: ");
+
     switch (tls_version)
     {
         case SSL_3_0:
@@ -124,70 +188,139 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         default:
             printf("unknown (%d)", tls_version);
     }
-    printf("\n");
+    if (json)
+        printf("\"");
+    else
+        printf("\n");
 
+    if (!json)
+        printf("Cipher suites length: %d\n", cipher_suites_length);
 
-    printf("Cipher suites length: %d\n", cipher_suites_length);
     cipher_suites_start = cipher_suites_pos + HANDSHAKE_CH_CIPHERS_LENGTH_LEN;
     cipher_suites_end = cipher_suites_start + cipher_suites_length;
 
-    printf("Cipher suites:\n");
+    if (json)
+        printf(",\n\"ciphers\": [\n");
+    else
+        printf("Cipher suites:\n");
+
+    i = 0;
     for (pos = cipher_suites_start; pos < cipher_suites_end; pos += HANDSHAKE_CH_CIPHER_LEN)
     {
+        if (json && i != 0)
+            printf(",\n");
+
         unsigned cipher = read_uint(buffer, pos, HANDSHAKE_CH_CIPHER_LEN);
         /* printf("%#04x ", cipher); */
         char *name = cipher_name(cipher);
         if(!name)
         {
+            if (json)
+                printf("\"unknown (%.04x)\"", cipher);
+            i++;
             fprintf(stderr, "WARNING: Unknown cipher suite %#04x!\n", cipher);
             continue;
         }
-        printf("\t%s (%#.04x)\n", name, cipher);
+        if (json)
+            printf("\t\"%s (%#.04x)\"", name, cipher);
+        else
+            printf("\t%s (%#.04x)\n", name, cipher);
+        i++;
     }
+
+    if (json)
+        printf("]");
 
     compression_methods_pos = pos;
     compression_methods_length = read_uint(buffer, compression_methods_pos, HANDSHAKE_CH_COMP_LENGTH_LEN);
     if (compression_methods_length)
     {
-        printf("Compression methods length: %d\n", compression_methods_length);
-    
+        if (!json)
+            printf("Compression methods length: %d\n", compression_methods_length);
+
         compression_methods_start = compression_methods_pos + HANDSHAKE_CH_COMP_LENGTH_LEN;
         compression_methods_end = compression_methods_start + compression_methods_length;
 
-        printf("Compression methods:\n");
+        if (json)
+            printf(",\n\"compression_methods\": [\n");
+        else
+            printf("Compression methods:\n");
+
+        i = 0;
         for (pos = compression_methods_start; pos < compression_methods_end; pos += HANDSHAKE_CH_COMP_METHOD_LEN)
         {
             unsigned compression = read_uint(buffer, pos, HANDSHAKE_CH_COMP_METHOD_LEN);
+
+            if (json)
+            {
+                if (i != 0)
+                    printf(",\n");
+                else
+                    printf("");
+            }
             switch (compression)
             {
                 default:
                     fprintf(stderr, "WARNING: Unknown compression method %#04x!\n", compression);
                     break;
                 case COMP_NULL:
-                    printf("\tNo compression (NULL).\n");
+                    if (json)
+                        printf("\t\"NULL\"");
+                    else
+                        printf("\tNo compression (NULL).\n");
                     break;
                 case COMP_DEFLATE:
-                    printf("\tDEFLATE\n");
+                    if (json)
+                        printf("\t\"DEFLATE\"");
+                    else
+                        printf("\tDEFLATE\n");
                     break;
                 case COMP_LZS:
-                    printf("\tLZS\n");
+                    if (json)
+                        printf("\t\"LZS\"");
+                    else
+                        printf("\tLZS\n");
                     break;
             }
+            i++;
         }
+        if (json)
+            printf("]");
     }
     else
     {
-        printf("No compression methods specified.\n");
+        if (!json)
+            printf("No compression methods specified.\n");
         pos = compression_methods_pos + HANDSHAKE_CH_COMP_LENGTH_LEN;
     }
 
     extensions_pos = pos;
+    if (pos == buffer_length)
+    {
+        if (json)
+            printf("}\n");
+        return NULL;
+    }
+
     extensions_length = read_uint(buffer, extensions_pos, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    printf("Extensions length: %d\n", extensions_length);
-    printf("Extensions:\n");
+
+    if (!json)
+    {
+        printf("Extensions length: %d\n", extensions_length);
+    }
+
+    if (extensions_length)
+    {
+        if (json)
+            printf(",\n\"extensions\": [\n");
+        else
+            printf("Extensions:\n");
+    }
+
+    i = 0;
     for (pos = extensions_start; pos < extensions_end; )
     {
         unsigned extension_id = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_ID_LEN);
@@ -196,7 +329,18 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN;
         /* printf("%#04x ", cipher); */
         const char *name = extension_name(extension_id);
-        printf("\t%s (id = %d len = %d))\n", name, extension_id, extension_data_length);
+
+        if (json)
+        {
+            if (i != 0)
+                printf(",\n");
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u, \"raw\": \"", name, extension_id, extension_data_length);
+            print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+            printf("\", \"data\": {");
+        }
+        else
+            printf("\t%s (id = %u len = %u))\n", name, extension_id, extension_data_length);
+
         switch (extension_id)
         {
             default:
@@ -204,7 +348,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 continue;
 
             case EXT_SERVER_NAME:
-                parse_sni((char *)buffer, pos, extension_data_length);
+                parse_sni((char *)buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_MAX_FRAGMENT_LENGTH:
@@ -235,11 +379,11 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 break;
 
             case EXT_SUPPORTED_GROUPS:
-                parse_supported_groups((char *) buffer, pos, extension_data_length);
+                parse_supported_groups((char *) buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_EC_POINT_FORMATS:
-                parse_point_formats((char *) buffer, pos, extension_data_length);
+                parse_point_formats((char *) buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_SRP:
@@ -255,7 +399,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 break;
 
             case EXT_APPLICATION_LAYER_PROTOCOL_NEGOTIATION:
-                parse_alpns((char *) buffer, pos, extension_data_length);
+                parse_alpns((char *) buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_STATUS_REQUEST_V2:
@@ -291,19 +435,25 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             case EXT_RENEGOTIATION_INFO:
                 break;
         }
+        if (json)
+            printf("}}");
+        i++;
         pos += extension_data_length;
     }
+    if (json)
+        printf("\n]\n}\n");
 
     return 0;
 }
 
-struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length)
+struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length, int json)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
     unsigned session_id_length = 0;
     unsigned cipher_suites_pos = 0;
     unsigned pos = 0;
+    unsigned i = 0;
 
     unsigned compression_methods_pos = 0;
     unsigned compression_methods_length = 0;
@@ -316,22 +466,48 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     unsigned extensions_end = 0;
 
     tls_version = read_uint(buffer, HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
-    printf("Random:");
-    print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
-    session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
-    if (session_id_length)
+
+    if (json)
     {
-        printf("Session ID length: %d\n", session_id_length);
-        printf("Session ID:");
-        print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+        printf("\"random\": \"");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        printf("\"");
     }
     else
     {
-        printf("No session ID specified.\n");
+        printf("Random:");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
     }
+
+    session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
+    if (session_id_length)
+    {
+        if (json)
+        {
+            printf(",\n\"session_id\": \"");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            printf("\"");
+        }
+        else
+        {
+            printf("Session ID length: %d\n", session_id_length);
+            printf("Session ID:");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+        }
+    }
+    else
+    {
+        if (!json)
+            printf("No session ID specified.\n");
+    }
+
     cipher_suites_pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
 
-    printf("TLS version: ");
+    if (json)
+        printf(",\n\"tls_version\": \"");
+    else
+        printf("TLS version: ");
+
     switch (tls_version)
     {
         case SSL_3_0:
@@ -349,36 +525,68 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         default:
             printf("unknown (%d)", tls_version);
     }
-    printf("\n");
+    if (json)
+        printf("\",");
+    else
+        printf("\n");
+
     pos = HANDSHAKE_CH_SESSION_ID_OFFSET + session_id_length;
 
-    printf("Cipher suite:");
+    if (json)
+        printf("\n\"cipher\": ");
+    else
+        printf("Cipher suite:");
+
     unsigned cipher = read_uint(buffer, pos, HANDSHAKE_CH_CIPHER_LEN);
     /* printf("%#04x ", cipher); */
     char *name = cipher_name(cipher);
     if(!name)
     {
         fprintf(stderr, "WARNING: Unknown cipher suite %#04x!\n", cipher);
+        if (json)
+            printf("\"unknown (%.04x)\"", cipher);
     }
-    printf("\t%s (%#.04x)\n", name, cipher);
+    else
+    {
+        if (json)
+            printf("\"%s (%#.04x)\"", name, cipher);
+        else
+            printf("\t%s (%#.04x)\n", name, cipher);
+    }
+
     pos = pos + HANDSHAKE_CH_CIPHER_LEN;
 
     compression_methods_pos = pos;
-    printf("Compression method:\n");
+    if (json)
+        printf(",\n\"compression_method\": ");
+    else
+        printf("Compression method:\n");
+
     unsigned compression = read_uint(buffer, pos, HANDSHAKE_CH_COMP_METHOD_LEN);
     switch (compression)
     {
         default:
             fprintf(stderr, "WARNING: Unknown compression method %#04x!\n", compression);
+            if (json)
+                printf("\"UNKNOWN (%#.04x)\"", compression);
             break;
         case COMP_NULL:
-            printf("\tNo compression (NULL).\n");
+            if (json)
+                printf("\"NULL\"");
+            else
+                printf("\tNo compression (NULL).\n");
             break;
         case COMP_DEFLATE:
-            printf("\tDEFLATE\n");
+            if (json)
+                printf("\"DEFLATE\"");
+            else
+                printf("\tDEFLATE\n");
             break;
         case COMP_LZS:
-            printf("\tLZS\n");
+            if (json)
+                printf("\"LZS\"");
+            else
+                printf("\tLZS\n");
             break;
     }
 
@@ -389,8 +597,19 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    printf("Extensions length: %d\n", extensions_length);
-    printf("Extensions:\n");
+    if (!json)
+    {
+        printf("Extensions length: %d\n", extensions_length);
+    }
+
+    if (extensions_length)
+    {
+        if (json)
+            printf(",\n\"extensions\": [\n");
+        else
+            printf("Extensions:\n");
+    }
+
     for (pos = extensions_start; pos < extensions_end; )
     {
         unsigned extension_id = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_ID_LEN);
@@ -399,7 +618,18 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN;
         /* printf("%#04x ", cipher); */
         const char *name = extension_name(extension_id);
-        printf("\t%s (id = %d len = %d))\n", name, extension_id, extension_data_length);
+
+        if (json)
+        {
+            if (i != 0)
+                printf(",\n");
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u, \"raw\": \"", name, extension_id, extension_data_length);
+            print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+            printf("\", \"data\": {");
+        }
+        else
+            printf("\t%s (id = %u len = %u))\n", name, extension_id, extension_data_length);
+
         switch (extension_id)
         {
             default:
@@ -407,7 +637,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 continue;
 
             case EXT_SERVER_NAME:
-                parse_sni((char *)buffer, pos, extension_data_length);
+                parse_sni((char *)buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_MAX_FRAGMENT_LENGTH:
@@ -438,11 +668,11 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_SUPPORTED_GROUPS:
-                parse_supported_groups((char *)buffer, pos, extension_data_length);
+                parse_supported_groups((char *)buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_EC_POINT_FORMATS:
-                parse_point_formats((char *)buffer, pos, extension_data_length);
+                parse_point_formats((char *)buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_SRP:
@@ -458,7 +688,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_APPLICATION_LAYER_PROTOCOL_NEGOTIATION:
-                parse_alpns((char *)buffer, pos, extension_data_length);
+                parse_alpns((char *)buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_STATUS_REQUEST_V2:
@@ -494,8 +724,13 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
             case EXT_RENEGOTIATION_INFO:
                 break;
         }
+        if (json)
+            printf("}}");
+        i++;
         pos += extension_data_length;
     }
 
+    if (json)
+        printf("\n]\n}\n");
     return 0;
 }

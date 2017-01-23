@@ -1,7 +1,7 @@
 #ifndef __ALPN_EXTENSION_H
 #define __ALPN_EXTENSION_H
 
-void parse_alpns(char *data, unsigned offset, unsigned length);
+void parse_alpns(char *data, unsigned offset, unsigned length, int json);
 const char *alpn_desc(char *code);
 
 #define ALPN_SET_LENGTH                 2

@@ -6,7 +6,7 @@
 
 const char *extension_name(unsigned extension_id);
 const char *sni_type_name(unsigned code);
-struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length);
+struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json);
 
 #define EXT_SERVER_NAME                                 0
 #define EXT_MAX_FRAGMENT_LENGTH                         1
