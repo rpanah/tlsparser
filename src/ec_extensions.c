@@ -110,6 +110,36 @@ const char *ec_named_curve_name(unsigned code)
         case EC_NAMED_CURVE_SECP521R1:
             return "EC_NAMED_CURVE_SECP521R1";
             break;
+        case EC_NAMED_CURVE_BRAINPOOLP256R1:
+            return "EC_NAMED_CURVE_BRAINPOOLP256R1";
+            break;
+        case EC_NAMED_CURVE_BRAINPOOLP384R1:
+            return "EC_NAMED_CURVE_BRAINPOOLP384R1";
+            break;
+        case EC_NAMED_CURVE_BRAINPOOLP512R1:
+            return "EC_NAMED_CURVE_BRAINPOOLP512R1";
+            break;
+        case EC_NAMED_CURVE_ECDH_X25519:
+            return "EC_NAMED_CURVE_ECDH_X25519";
+            break;
+        case EC_NAMED_CURVE_ECDH_X448:
+            return "EC_NAMED_CURVE_ECDH_X448";
+            break;
+        case EC_NAMED_CURVE_FFDHE2048:
+            return "EC_NAMED_CURVE_FFDHE2048";
+            break;
+        case EC_NAMED_CURVE_FFDHE3072:
+            return "EC_NAMED_CURVE_FFDHE3072";
+            break;
+        case EC_NAMED_CURVE_FFDHE4096:
+            return "EC_NAMED_CURVE_FFDHE4096";
+            break;
+        case EC_NAMED_CURVE_FFDHE6144:
+            return "EC_NAMED_CURVE_FFDHE6144";
+            break;
+        case EC_NAMED_CURVE_FFDHE8192:
+            return "EC_NAMED_CURVE_FFDHE8192";
+            break;
         case EC_NAMED_CURVE_ARBITRARY_EXPLICIT_PRIME_CURVES:
             return "EC_NAMED_CURVE_ARBITRARY_EXPLICIT_PRIME_CURVES";
             break;
