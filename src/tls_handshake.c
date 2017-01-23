@@ -255,8 +255,6 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             {
                 if (i != 0)
                     printf(",\n");
-                else
-                    printf("");
             }
             switch (compression)
             {
