@@ -69,12 +69,16 @@ void print_hex_blob(void *_buffer, unsigned offset, unsigned size, unsigned shor
     unsigned char *buffer = _buffer;
     const int line_break = 16;
 
-    for (i = offset; i < offset + size; i++) {
+    if (size == 0)
+        return;
+
+    printf("%02x", (unsigned int)(buffer[offset]));
+    for (i = offset + 1; i < offset + size; i++) {
         if (spacing && (i - offset) % line_break == 0) {
             printf("\n");
             print_tabs(tabs);
         }
-        printf("%02x:", (unsigned int)(buffer[i]));
+        printf(":%02x", (unsigned int)(buffer[i]));
     }
     if (spacing)
         printf("\n");
