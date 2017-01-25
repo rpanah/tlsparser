@@ -430,6 +430,15 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             case EXT_SESSION_TICKET_TLS:
                 break;
 
+            case OLD_EXT_NEXT_PROTOCOL_NEGOTIATION:
+                break;
+
+            case OLD_EXT_CHANNEL_ID:
+                break;
+
+            case EXT_CHANNEL_ID:
+                break;
+
             case EXT_RENEGOTIATION_INFO:
                 break;
         }
@@ -721,6 +730,15 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_SESSION_TICKET_TLS:
+                break;
+
+            case OLD_EXT_NEXT_PROTOCOL_NEGOTIATION:
+                break;
+
+            case OLD_EXT_CHANNEL_ID:
+                break;
+
+            case EXT_CHANNEL_ID:
                 break;
 
             case EXT_RENEGOTIATION_INFO:
