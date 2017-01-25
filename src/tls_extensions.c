@@ -127,6 +127,14 @@ const char *extension_name(unsigned code)
             return "NEXT_PROTOCOL_NEGOTIATION";
             break;
 
+        case OLD_EXT_CHANNEL_ID:
+            return "OLD_CHANNEL_ID";
+            break;
+
+        case EXT_CHANNEL_ID:
+            return "CHANNEL_ID";
+            break;
+
         case EXT_RENEGOTIATION_INFO:
             return "RENEGOTIATION_INFO";
             break;
