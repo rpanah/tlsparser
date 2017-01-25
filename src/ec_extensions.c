@@ -7,6 +7,8 @@ void parse_supported_groups(char *data, unsigned offset, unsigned length, int js
     unsigned pos = offset;
     unsigned curves_length = read_uint(data, pos, EC_CURVE_SET_LENGTH);
     unsigned curve_code;
+    const char * name = NULL;
+
     int i = 0;
     pos += EC_CURVE_SET_LENGTH;
 
@@ -17,10 +19,16 @@ void parse_supported_groups(char *data, unsigned offset, unsigned length, int js
         if (json && i != 0)
             printf(", ");
         curve_code = read_uint(data, pos, EC_CURVE_LENGTH);
+        name = ec_named_curve_name(curve_code);
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown elliptic curve (%#.04x)", curve_code);
+        }
         if (json)
-            printf("{\"name\": \"%s\", \"code\": \"%#.04x\"}", ec_named_curve_name(curve_code), curve_code);
+            printf("{\"name\": \"%s\", \"code\": \"%#.04x\"}", name, curve_code);
         else
-            printf("\t\t%s\n", ec_named_curve_name(curve_code));
+            printf("\t\t%s\n", name);
         i++;
     }
     if (json)
@@ -32,7 +40,7 @@ const char *ec_named_curve_name(unsigned code)
     switch (code)
     {
         default:
-            return "unknown";
+            return NULL;
             break;
 
         case EC_NAMED_CURVE_SECT163K1:
@@ -155,6 +163,7 @@ void parse_point_formats(char *data, unsigned offset, unsigned length, int json)
     unsigned pos = offset;
     unsigned point_formats_length = read_uint(data, pos, EC_POINT_FORMAT_SET_LENGTH);
     unsigned point_format_code;
+    const char *name = NULL;
     int i = 0;
     pos += EC_POINT_FORMAT_SET_LENGTH;
 
@@ -165,10 +174,16 @@ void parse_point_formats(char *data, unsigned offset, unsigned length, int json)
         if (json && i != 0)
             printf(", ");
         point_format_code = read_uint(data, pos, EC_POINT_FORMAT_LENGTH);
+        name = ec_point_format_name(point_format_code);
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown point format (%#.02x)", point_format_code);
+        }
         if (json)
-            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", ec_point_format_name(point_format_code), point_format_code);
+            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", name, point_format_code);
         else
-            printf("\t\t%s\n", ec_point_format_name(point_format_code));
+            printf("\t\t%s\n", name);
         i++;
     }
     if(json)
@@ -180,7 +195,7 @@ const char *ec_point_format_name(unsigned code)
     switch (code)
     {
         default:
-            return "unknown";
+            return NULL;
             break;
 
         case EC_POINT_FORMAT_UNCOMPRESSED:
