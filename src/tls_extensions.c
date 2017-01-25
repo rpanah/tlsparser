@@ -123,6 +123,10 @@ const char *extension_name(unsigned code)
             return "SESSION_TICKET_TLS";
             break;
 
+        case OLD_EXT_NEXT_PROTOCOL_NEGOTIATION:
+            return "NEXT_PROTOCOL_NEGOTIATION";
+            break;
+
         case EXT_RENEGOTIATION_INFO:
             return "RENEGOTIATION_INFO";
             break;
