@@ -1606,6 +1606,16 @@ char *cipher_name(unsigned code)
             break;
     
 
+        case OLD_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
+            return "OLD_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
+            break;
+    
+
+        case OLD_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
+            return "OLD_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256";
+            break;
+    
+
         case TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
             return "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
             break;
