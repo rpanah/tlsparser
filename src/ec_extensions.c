@@ -32,7 +32,7 @@ const char *ec_named_curve_name(unsigned code)
     switch (code)
     {
         default:
-            return "RESERVED";
+            return "unknown";
             break;
 
         case EC_NAMED_CURVE_SECT163K1:
@@ -180,7 +180,7 @@ const char *ec_point_format_name(unsigned code)
     switch (code)
     {
         default:
-            return "RESERVED";
+            return "unknown";
             break;
 
         case EC_POINT_FORMAT_UNCOMPRESSED:
