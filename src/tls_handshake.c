@@ -137,8 +137,9 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     }
     else
     {
-        printf("Random:");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
+        printf("\nRandom: ");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        printf("\n");
     }
 
     session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
@@ -153,8 +154,9 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         else
         {
             printf("Session ID length: %d\n", session_id_length);
-            printf("Session ID:");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+            printf("Session ID: ");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            printf("\n");
         }
     }
     else
@@ -300,10 +302,33 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         return NULL;
     }
 
-    extensions_length = read_uint(buffer, extensions_pos, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
+    if (pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN > buffer_length)
+    {
+        fprintf(stderr, "No extensions.\n");
+        extensions_length = 0;
+    }
+    else
+        extensions_length = read_uint(buffer, extensions_pos, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
+
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
+    if (extensions_end != buffer_length)
+    {
+        fprintf(stderr, "WARNING! Extensions' end doesn't match buffer end (%u, %u).\n", extensions_end, buffer_length);
+        extensions_length = 0;
+        extensions_start = 0;
+        extensions_end = 0;
+        if (json)
+            printf(", \"trailing data\": \"");
+        else
+            printf("Trailing data: \n");
+
+        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0);
+
+        if (json)
+            printf("\"\n");
+    }
 
     if (!json)
     {
@@ -486,8 +511,9 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     }
     else
     {
-        printf("Random:");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 1, 1);
+        printf("\nRandom: ");
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        printf("\n");
     }
 
     session_id_length = read_uint(buffer, HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
@@ -502,8 +528,9 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         else
         {
             printf("Session ID length: %d\n", session_id_length);
-            printf("Session ID:");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 1, 1);
+            printf("Session ID: ");
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            printf("\n");
         }
     }
     else
@@ -604,9 +631,34 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     pos = pos + HANDSHAKE_CH_COMP_METHOD_LEN;
 
     extensions_pos = pos;
-    extensions_length = read_uint(buffer, extensions_pos, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
+
+    if (pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN > buffer_length)
+    {
+        fprintf(stderr, "No extensions.\n");
+        extensions_length = 0;
+    }
+    else
+        extensions_length = read_uint(buffer, extensions_pos, HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN);
+
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
+
+    if (extensions_end != buffer_length)
+    {
+        fprintf(stderr, "WARNING! Extensions' end doesn't match buffer end (%u, %u).\n", extensions_end, buffer_length);
+        extensions_length = 0;
+        extensions_start = 0;
+        extensions_end = 0;
+        if (json)
+            printf(", \"trailing data\": \"");
+        else
+            printf("Trailing data: \n");
+
+        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0);
+
+        if (json)
+            printf("\"\n");
+    }
 
     if (!json)
     {
