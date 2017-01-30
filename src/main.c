@@ -165,6 +165,8 @@ int main(int argc, char **argv)
             if (json)
                 printf("\",\n\"record_data\": {");
             process_handshake(buffer, buffer_size, json);
+            if (json)
+                printf("}");
             break;
         case APPLICATION_DATA:
             printf("APPLICATION_DATA");

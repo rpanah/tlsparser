@@ -476,7 +476,6 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     {
         if (i != 0)
             printf("\n]");
-        printf("\n}\n");
     }
 
     return 0;
@@ -806,7 +805,6 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     {
         if (i != 0)
             printf("\n]");
-        printf("\n}\n");
     }
     return 0;
 }
