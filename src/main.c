@@ -17,7 +17,7 @@
 
 int main(int argc, char **argv)
 {
-    FILE *f;
+    FILE *f = NULL;
     unsigned char *raw_buffer = (unsigned char *)malloc(sizeof(unsigned char) * 10000);
     guchar *decoded = NULL;
     gsize *decoded_len = (gsize *)malloc(sizeof(gsize));
