@@ -1,51 +1,33 @@
 #include <openssl/ssl.h>
-#include <openssl/tls1.h>
-#include <openssl/ssl3.h>
-#include <openssl/conf.h>
-#include <openssl/err.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "openssl_ciphers.h"
+
 /* gcc test.c -L/opt/local/lib -lssl -lcrypto -o test_run */
 
-int main() {
-    unsigned char ciphers[] = { 0xba, 0xba };
-    const SSL_METHOD *meth = TLSv1_2_method();
-    SSL_CTX *ctx = NULL;
-    SSL_CIPHER *cipher = NULL;
+int main(int argc, char **argv) {
+    unsigned char *ciphers = (unsigned char *)malloc(sizeof(unsigned char) * 2);
+    unsigned short x = 0;
+    const SSL_CIPHER *cipher = NULL;
 
-    SSL_load_error_strings();
-    OpenSSL_add_ssl_algorithms();
-
-    ctx = SSL_CTX_new(meth);
-
-    BIO *bio_err = BIO_new_fp(stderr, BIO_NOCLOSE | BIO_FP_TEXT);
-
-    if (!meth)
+    if (argc != 2)
     {
-        fprintf(stderr, "Method is null\n");
-        ERR_print_errors(bio_err);
+        fprintf(stderr, "Invalid arguments given.\n");
+        exit(1);
+    }
+    else
+    {
+        sscanf(argv[1], "%x", &x);
+        ciphers [0] = (unsigned char)(x >> 8);
+        ciphers [1] = (unsigned char)(x % 256);
     }
 
-    if (!ctx)
-    {
-        fprintf(stderr, "CTX is null\n");
-        ERR_print_errors(bio_err);
-    }
+    cipher = ssl3_get_cipher_by_char(ciphers);
 
-    SSL *ssl = SSL_new(ctx);
-    if (!ssl)
-    {
-        fprintf(stderr, "SSL is null\n");
-        ERR_print_errors(bio_err);
-    }
-
-    cipher = ssl->method->get_cipher_by_char(ciphers);
     if (!cipher)
     {
         fprintf(stderr, "Cipher is null\n");
-        ERR_print_errors(bio_err);
         exit(0);
     }
 
