@@ -367,7 +367,8 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         switch (extension_id)
         {
             default:
-                fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
+                if (name == NULL)
+                    fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
                 break;
 
             case EXT_SERVER_NAME:
@@ -695,7 +696,8 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         switch (extension_id)
         {
             default:
-                fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
+                if (name == NULL)
+                    fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
                 break;
 
             case EXT_SERVER_NAME:
