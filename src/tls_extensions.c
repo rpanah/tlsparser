@@ -142,6 +142,24 @@ const char *extension_name(unsigned code)
         case EXT_SHORT_HEADER:
             return "SHORT_HEADER";
             break;
+
+        case 0x0a0a:
+        case 0x1a1a:
+        case 0x2a2a:
+        case 0x3a3a:
+        case 0x4a4a:
+        case 0x5a5a:
+        case 0x6a6a:
+        case 0x7a7a:
+        case 0x8a8a:
+        case 0x9a9a:
+        case 0xaaaa:
+        case 0xbaba:
+        case 0xcaca:
+        case 0xdada:
+        case 0xeaea:
+        case 0xfafa:
+            return "GOOGLE_GREASE";
     }
 }
 
