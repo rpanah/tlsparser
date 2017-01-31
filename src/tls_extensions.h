@@ -39,6 +39,7 @@ struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json
 #define OLD_EXT_CHANNEL_ID                              30031
 #define EXT_CHANNEL_ID                                  30032
 #define EXT_RENEGOTIATION_INFO                          65281
+#define EXT_SHORT_HEADER                                65283 // https://nss-review.dev.mozaws.net/D122
 
 #define SNI_TYPE_LENGTH                                 1
 #define SNI_NAME_LENGTH_LEN                             2

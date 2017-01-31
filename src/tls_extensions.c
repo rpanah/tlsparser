@@ -138,6 +138,10 @@ const char *extension_name(unsigned code)
         case EXT_RENEGOTIATION_INFO:
             return "RENEGOTIATION_INFO";
             break;
+
+        case EXT_SHORT_HEADER:
+            return "SHORT_HEADER";
+            break;
     }
 }
 
