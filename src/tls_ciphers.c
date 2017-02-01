@@ -1676,6 +1676,15 @@ char *cipher_name(unsigned code)
             break;
     
 
+        case TLS_GOST2012_WITH_GOST8912_GOST8912:
+            return "TLS_GOST2012_WITH_GOST8912_GOST8912";
+            break;
+    
+
+        case TLS_GOST2012_WITH_NULL_GOST12:
+            return "TLS_GOST2012_WITH_NULL_GOST12";
+            break;
+
         case 0x0a0a:
         case 0x1a1a:
         case 0x2a2a:
