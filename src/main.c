@@ -131,20 +131,21 @@ int main(int argc, char **argv)
             if (json)
                 printf("\"");
     }
-    printf(",\n");
 
 
     if (!json)
-        printf("Record length: %d\n", record_length);
+        printf("\nRecord length: %d\n", record_length);
 
     if (record_length != buffer_size - TLS_HEADER_LEN)
     {
         fprintf(stderr, "ERROR: Record length (%d) doesn't match the data (%lu).\n", record_length, buffer_size - TLS_HEADER_LEN);
+        if (json)
+            printf("}");
         exit(1);
     }
 
     if (json)
-        printf("\"record_type\" : \"");
+        printf(",\n\"record_type\" : \"");
     else
         printf("Record type: ");
 
@@ -164,6 +165,8 @@ int main(int argc, char **argv)
             printf("HANDSHAKE");
             if (json)
                 printf("\",\n\"record_data\": {");
+            else
+                printf("\n");
             process_handshake(buffer, buffer_size, json);
             if (json)
                 printf("}");
