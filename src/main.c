@@ -15,10 +15,12 @@
 #include "utils.h"
 #include "x509_cert.h"
 
+#define MAX_SIZE 65536
+
 int main(int argc, char **argv)
 {
     FILE *f = NULL;
-    unsigned char *raw_buffer = (unsigned char *)malloc(sizeof(unsigned char) * 10000);
+    unsigned char *raw_buffer = (unsigned char *)malloc(sizeof(unsigned char) * MAX_SIZE);
     guchar *decoded = NULL;
     gsize *decoded_len = (gsize *)malloc(sizeof(gsize));
     unsigned long raw_buffer_size = 0;
@@ -36,7 +38,6 @@ int main(int argc, char **argv)
         if (strcmp(argv[i], "--json") == 0 || strcmp(argv[i], "-j") == 0)
         {
             json = 1;
-            fprintf(stderr, "JSON output selected\n");
         }
         else
             f = fopen(argv[i], "rb");
@@ -44,7 +45,8 @@ int main(int argc, char **argv)
 
     if (f == NULL)
     {
-        fprintf(stderr, "No input file given, using standard input.\n");
+        if (!json)
+            fprintf(stderr, "No input file given, using standard input.\n");
         f = stdin;
     }
     else
@@ -52,11 +54,11 @@ int main(int argc, char **argv)
 
     if (!f)
     {
-        fprintf(stderr, "Can't open input file.\n");
+        fprintf(stderr, "Can't open input file %s\n", argv[1]);
         exit(1);
     }
 
-    raw_buffer_size = fread(raw_buffer, 1, 10000, f);
+    raw_buffer_size = fread(raw_buffer, 1, MAX_SIZE, f);
 
     if (print_x509_cert(raw_buffer, raw_buffer_size) == TRUE)
     {
@@ -66,13 +68,13 @@ int main(int argc, char **argv)
     decoded = g_base64_decode((const char *)raw_buffer, decoded_len);
     if (decoded == NULL || *decoded_len <= 0)
     {
-        //printf("Input not base64.\n");
         buffer = raw_buffer;
         buffer_size = raw_buffer_size;
     }
     else
     {
-        fprintf(stderr, "Base64 decoded (len: %lu).\n", *decoded_len);
+        if (!json)
+            fprintf(stderr, "Base64 decoded (len: %lu).\n", *decoded_len);
         buffer = (unsigned char *)decoded;
         buffer_size = *decoded_len;
     }
