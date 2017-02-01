@@ -391,6 +391,26 @@ char *cipher_name(unsigned code)
             break;
     
 
+        case TLS_GOSTR341094_WITH_28147_CNT_IMIT:
+            return "TLS_GOSTR341094_WITH_28147_CNT_IMIT";
+            break;
+    
+
+        case TLS_GOSTR341001_WITH_28147_CNT_IMIT:
+            return "TLS_GOSTR341001_WITH_28147_CNT_IMIT";
+            break;
+    
+
+        case TLS_GOSTR341094_WITH_NULL_GOSTR3411:
+            return "TLS_GOSTR341094_WITH_NULL_GOSTR3411";
+            break;
+    
+
+        case TLS_GOSTR341001_WITH_NULL_GOSTR3411:
+            return "TLS_GOSTR341001_WITH_NULL_GOSTR3411";
+            break;
+    
+
         case TLS_RSA_WITH_CAMELLIA_256_CBC_SHA:
             return "TLS_RSA_WITH_CAMELLIA_256_CBC_SHA";
             break;
