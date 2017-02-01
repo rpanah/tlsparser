@@ -297,8 +297,6 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     extensions_pos = pos;
     if (pos == buffer_length)
     {
-        if (json)
-            printf("}\n");
         return NULL;
     }
 
@@ -631,6 +629,11 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     pos = pos + HANDSHAKE_CH_COMP_METHOD_LEN;
 
     extensions_pos = pos;
+
+    if (pos == buffer_length)
+    {
+        return NULL;
+    }
 
     if (pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN > buffer_length)
     {
