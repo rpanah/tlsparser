@@ -39,7 +39,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
             printf("CLIENT_HELLO");
             if (json)
                 printf("\", \"handshake_data\": {\n");
-            process_handshake_client_hello(buffer, buffer_length, json, raw);
+            process_handshake_client_hello(buffer, buffer_length, handshake_length, json, raw);
             if (json)
                 printf("}\n");
             break;
@@ -47,7 +47,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
             printf("SERVER_HELLO");
             if (json)
                 printf("\", \"handshake_data\": {\n");
-            process_handshake_server_hello(buffer, buffer_length, json, raw);
+            process_handshake_server_hello(buffer, buffer_length, handshake_length, json, raw);
             if (json)
                 printf("}\n");
             break;
@@ -105,7 +105,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
     return 0;
 }
 
-struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length, int json, int raw)
+struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length, int handshake_length, int json, int raw)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
@@ -313,7 +313,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
 
     if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
@@ -329,7 +329,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     }
     else if (extensions_end < buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end before buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
         if (json)
             printf(", \"trailing_data\": \"");
         else
@@ -499,7 +499,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     return 0;
 }
 
-struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length, int json, int raw)
+struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length, int handshake_length, int json, int raw)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
@@ -667,7 +667,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
 
     if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
@@ -683,7 +683,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     }
     else if (extensions_end < buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end before buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
         if (json)
             printf(", \"trailing_data\": \"");
         else
