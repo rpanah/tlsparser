@@ -313,7 +313,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
 
     if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (pos: %u, extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", pos, extensions_end, buffer_length, handshake_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
@@ -329,7 +329,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     }
     else if (extensions_end < buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
+        fprintf(stderr, "WARNING! Extensions end before buffer ends (pos: %u, extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", pos, extensions_end, buffer_length, handshake_length);
         if (json)
             printf(", \"trailing_data\": \"");
         else
@@ -667,7 +667,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
 
     if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (pos: %u, extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", pos, extensions_end, buffer_length, handshake_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
@@ -683,7 +683,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     }
     else if (extensions_end < buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions end after buffer ends (extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", extensions_end, buffer_length, handshake_length);
+        fprintf(stderr, "WARNING! Extensions end before buffer ends (pos: %u, extensions_end: %u, buffer_length: %u, handshake_length: %u).\n", pos, extensions_end, buffer_length, handshake_length);
         if (json)
             printf(", \"trailing_data\": \"");
         else
