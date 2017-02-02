@@ -412,6 +412,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
                 break;
 
             case EXT_SIGNATURE_ALGORITHMS:
+                parse_signature_algorithms((char *) buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_USE_SRTP:
@@ -746,6 +747,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_SIGNATURE_ALGORITHMS:
+                parse_signature_algorithms((char *) buffer, pos, extension_data_length, json);
                 break;
 
             case EXT_USE_SRTP:

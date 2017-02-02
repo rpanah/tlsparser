@@ -224,3 +224,135 @@ const char *sni_type_name(unsigned code)
             break;
     }
 }
+
+void parse_signature_algorithms(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned sigalgs_length = read_uint(data, pos, SIGALG_SET_LENGTH);
+    unsigned sigalg_code;
+    const char *name = NULL;
+    int i = 0;
+    pos += SIGALG_SET_LENGTH;
+
+    if (json)
+        printf("\"sigalg_list\": [");
+    for(; pos < offset + length; pos += SIGALG_LENGTH)
+    {
+        if (json && i != 0)
+            printf(", ");
+        sigalg_code = read_uint(data, pos, SIGALG_LENGTH);
+        name = sigalg_name(sigalg_code);
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown signature algorithm (%#.02x)\n", sigalg_code);
+        }
+        if (json)
+            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", name, sigalg_code);
+        else
+            printf("\t\t%s\n", name);
+        i++;
+    }
+    if(json)
+        printf("]");
+}
+
+const char *sigalg_name(unsigned code) {
+    switch (code)
+    {
+        default:
+            return NULL;
+            break;
+        case TLSEXT_SIGALG_ECDSA_SECP224R1_SHA224:
+            return "ECDSA_SECP224R1_SHA224";
+            break;
+
+        case TLSEXT_SIGALG_ECDSA_SECP256R1_SHA256:
+            return "ECDSA_SECP256R1_SHA256";
+            break;
+
+        case TLSEXT_SIGALG_ECDSA_SECP384R1_SHA384:
+            return "ECDSA_SECP384R1_SHA384";
+            break;
+
+        case TLSEXT_SIGALG_ECDSA_SECP521R1_SHA512:
+            return "ECDSA_SECP521R1_SHA512";
+            break;
+
+        case TLSEXT_SIGALG_ECDSA_SHA1:
+            return "ECDSA_SHA1";
+            break;
+
+        case  TLSEXT_SIGALG_RSA_PSS_SHA256:
+            return "RSA_PSS_SHA256";
+            break;
+
+        case  TLSEXT_SIGALG_RSA_PSS_SHA384:
+            return "RSA_PSS_SHA384";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PSS_SHA512:
+            return "RSA_PSS_SHA512";
+            break;
+
+        case TLSEXT_SIGALG_ED25519:
+            return "ED25519";
+            break;
+
+        case TLSEXT_SIGALG_ED448:
+            return "ED448";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PKCS1_SHA224:
+            return "RSA_PKCS1_SHA224";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PKCS1_SHA256:
+            return "RSA_PKCS1_SHA256";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PKCS1_SHA384:
+            return "RSA_PKCS1_SHA384";
+            break;
+
+        case  TLSEXT_SIGALG_RSA_PKCS1_SHA512:
+            return "RSA_PKCS1_SHA512";
+            break;
+
+        case  TLSEXT_SIGALG_RSA_PKCS1_SHA1:
+            return "RSA_PKCS1_SHA1";
+            break;
+
+        case  TLSEXT_SIGALG_DSA_SHA224:
+            return "DSA_SHA224";
+            break;
+
+        case  TLSEXT_SIGALG_DSA_SHA256:
+            return "DSA_SHA256";
+            break;
+
+        case  TLSEXT_SIGALG_DSA_SHA384:
+            return "DSA_SHA384";
+            break;
+
+        case  TLSEXT_SIGALG_DSA_SHA512:
+            return "DSA_SHA512";
+            break;
+
+        case  TLSEXT_SIGALG_DSA_SHA1:
+            return "DSA_SHA1";
+            break;
+
+        case  TLSEXT_SIGALG_GOSTR34102012_256_GOSTR34112012_256:
+            return "GOSTR34102012_256_GOSTR34112012_256";
+            break;
+
+        case  TLSEXT_SIGALG_GOSTR34102012_512_GOSTR34112012_512:
+            return "GOSTR34102012_512_GOSTR34112012_512";
+            break;
+
+        case  TLSEXT_SIGALG_GOSTR34102001_GOSTR3411:
+            return "GOSTR34102001_GOSTR3411";
+            break;
+    }
+}

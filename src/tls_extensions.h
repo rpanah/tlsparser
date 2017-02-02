@@ -8,6 +8,9 @@ const char *extension_name(unsigned extension_id);
 const char *sni_type_name(unsigned code);
 struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json);
 
+void parse_signature_algorithms(char *data, unsigned offset, unsigned length, int json);
+const char *sigalg_name(unsigned code);
+
 #define EXT_SERVER_NAME                                 0
 #define EXT_MAX_FRAGMENT_LENGTH                         1
 #define EXT_CLIENT_CERTIFICATE_URL                      2
@@ -44,5 +47,39 @@ struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json
 #define SNI_TYPE_LENGTH                                 1
 #define SNI_NAME_LENGTH_LEN                             2
 #define SNI_TYPE_HOSTNAME                               0
+
+/* Signature algorithms */
+
+#define SIGALG_SET_LENGTH                               2
+#define SIGALG_LENGTH                                   2
+
+#define TLSEXT_SIGALG_ECDSA_SECP224R1_SHA224                    0x0303
+#define TLSEXT_SIGALG_ECDSA_SECP256R1_SHA256                    0x0403
+#define TLSEXT_SIGALG_ECDSA_SECP384R1_SHA384                    0x0503
+#define TLSEXT_SIGALG_ECDSA_SECP521R1_SHA512                    0x0603
+#define TLSEXT_SIGALG_ECDSA_SHA1                                0x0203
+
+#define TLSEXT_SIGALG_RSA_PSS_SHA256                            0x0804
+#define TLSEXT_SIGALG_RSA_PSS_SHA384                            0x0805
+#define TLSEXT_SIGALG_RSA_PSS_SHA512                            0x0806
+
+#define TLSEXT_SIGALG_ED25519                                   0x0807
+#define TLSEXT_SIGALG_ED448                                     0x0808
+
+#define TLSEXT_SIGALG_RSA_PKCS1_SHA224                          0x0301
+#define TLSEXT_SIGALG_RSA_PKCS1_SHA256                          0x0401
+#define TLSEXT_SIGALG_RSA_PKCS1_SHA384                          0x0501
+#define TLSEXT_SIGALG_RSA_PKCS1_SHA512                          0x0601
+#define TLSEXT_SIGALG_RSA_PKCS1_SHA1                            0x0201
+
+#define TLSEXT_SIGALG_DSA_SHA224                                0x0302
+#define TLSEXT_SIGALG_DSA_SHA256                                0x0402
+#define TLSEXT_SIGALG_DSA_SHA384                                0x0502
+#define TLSEXT_SIGALG_DSA_SHA512                                0x0602
+#define TLSEXT_SIGALG_DSA_SHA1                                  0x0202
+
+#define TLSEXT_SIGALG_GOSTR34102012_256_GOSTR34112012_256       0xeeee
+#define TLSEXT_SIGALG_GOSTR34102012_512_GOSTR34112012_512       0xefef
+#define TLSEXT_SIGALG_GOSTR34102001_GOSTR3411                   0xeded
 
 #endif /* __TLS_EXTENSIONS_H */
