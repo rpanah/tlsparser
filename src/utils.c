@@ -63,7 +63,7 @@ unsigned read_int(void *_buffer, unsigned offset, unsigned size)
     return result;
 }
 
-void print_hex_blob(void *_buffer, unsigned offset, unsigned size, unsigned short tabs, unsigned short spacing)
+void print_hex_blob(void *_buffer, unsigned offset, unsigned size, unsigned short tabs, unsigned short spacing, int json)
 {
     unsigned i = 0;
     unsigned char *buffer = _buffer;
@@ -78,7 +78,9 @@ void print_hex_blob(void *_buffer, unsigned offset, unsigned size, unsigned shor
             printf("\n");
             print_tabs(tabs);
         }
-        printf(":%02x", (unsigned int)(buffer[i]));
+        if (!json)
+            printf(":");
+        printf("%02x", (unsigned int)(buffer[i]));
     }
     if (spacing)
         printf("\n");

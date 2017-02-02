@@ -132,13 +132,13 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     if (json)
     {
         printf("\"random\": \"");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0, json);
         printf("\"");
     }
     else
     {
         printf("\nRandom: ");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0, json);
         printf("\n");
     }
 
@@ -148,14 +148,14 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         if (json)
         {
             printf(",\n\"session_id\": \"");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0, json);
             printf("\"");
         }
         else
         {
             printf("Session ID length: %d\n", session_id_length);
             printf("Session ID: ");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0, json);
             printf("\n");
         }
     }
@@ -322,7 +322,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         else
             printf("Trailing data: \n");
 
-        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0);
+        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0, json);
 
         if (json)
             printf("\"\n");
@@ -359,7 +359,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             if (raw)
             {
                 printf(", \"raw\": \"");
-                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0, json);
                 printf("\"");
             }
             printf(", \"data\": {");
@@ -510,13 +510,13 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     if (json)
     {
         printf("\"random\": \"");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0, json);
         printf("\"");
     }
     else
     {
         printf("\nRandom: ");
-        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0);
+        print_hex_blob(buffer, HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0, json);
         printf("\n");
     }
 
@@ -526,14 +526,14 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         if (json)
         {
             printf(",\n\"session_id\": \"");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0, json);
             printf("\"");
         }
         else
         {
             printf("Session ID length: %d\n", session_id_length);
             printf("Session ID: ");
-            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0);
+            print_hex_blob(buffer, HANDSHAKE_CH_SESSION_ID_OFFSET, session_id_length, 0, 0, json);
             printf("\n");
         }
     }
@@ -663,7 +663,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         else
             printf("Trailing data: \n");
 
-        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0);
+        print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0, json);
 
         if (json)
             printf("\"\n");
@@ -699,7 +699,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
             if (raw)
             {
                 printf(", \"raw\": \"");
-                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0, json);
                 printf("\"");
             }
             printf(", \"data\": {");

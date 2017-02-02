@@ -95,7 +95,7 @@ int main(int argc, char **argv)
         if (json)
         {
             printf("\"raw\": \"");
-            print_hex_blob(buffer, 0, buffer_size, 0, 0);
+            print_hex_blob(buffer, 0, buffer_size, 0, 0, json);
             printf("\",\n");
         }
         else
