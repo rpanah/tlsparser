@@ -279,6 +279,10 @@ const char *sigalg_name(unsigned code) {
             return "ECDSA_SECP521R1_SHA512";
             break;
 
+        case TLSEXT_SIGALG_ECDSA_MD5:
+            return "ECDSA_MD5";
+            break;
+
         case TLSEXT_SIGALG_ECDSA_SHA1:
             return "ECDSA_SHA1";
             break;
@@ -317,6 +321,10 @@ const char *sigalg_name(unsigned code) {
 
         case  TLSEXT_SIGALG_RSA_PKCS1_SHA512:
             return "RSA_PKCS1_SHA512";
+            break;
+
+        case  TLSEXT_SIGALG_RSA_PKCS1_MD5:
+            return "RSA_PKCS1_MD5";
             break;
 
         case  TLSEXT_SIGALG_RSA_PKCS1_SHA1:

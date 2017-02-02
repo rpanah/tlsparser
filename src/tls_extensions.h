@@ -57,6 +57,7 @@ const char *sigalg_name(unsigned code);
 #define TLSEXT_SIGALG_ECDSA_SECP256R1_SHA256                    0x0403
 #define TLSEXT_SIGALG_ECDSA_SECP384R1_SHA384                    0x0503
 #define TLSEXT_SIGALG_ECDSA_SECP521R1_SHA512                    0x0603
+#define TLSEXT_SIGALG_ECDSA_MD5                                 0x0103
 #define TLSEXT_SIGALG_ECDSA_SHA1                                0x0203
 
 #define TLSEXT_SIGALG_RSA_PSS_SHA256                            0x0804
@@ -70,6 +71,7 @@ const char *sigalg_name(unsigned code);
 #define TLSEXT_SIGALG_RSA_PKCS1_SHA256                          0x0401
 #define TLSEXT_SIGALG_RSA_PKCS1_SHA384                          0x0501
 #define TLSEXT_SIGALG_RSA_PKCS1_SHA512                          0x0601
+#define TLSEXT_SIGALG_RSA_PKCS1_MD5                             0x0101
 #define TLSEXT_SIGALG_RSA_PKCS1_SHA1                            0x0201
 
 #define TLSEXT_SIGALG_DSA_SHA224                                0x0302
