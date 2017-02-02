@@ -311,18 +311,31 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    if (extensions_end != buffer_length)
+    if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions' end doesn't match buffer end (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (%u, %u).\n", extensions_end, buffer_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
         if (json)
-            printf(", \"trailing data\": \"");
+            printf(", \"trailing_data\": \"");
         else
             printf("Trailing data: \n");
 
         print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0, json);
+
+        if (json)
+            printf("\"\n");
+    }
+    else if (extensions_end < buffer_length)
+    {
+        fprintf(stderr, "WARNING! Extensions end before buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        if (json)
+            printf(", \"trailing_data\": \"");
+        else
+            printf("Trailing data: \n");
+
+        print_hex_blob(buffer, extensions_end, (buffer_length - (extensions_end + 1)), 0, 0, json);
 
         if (json)
             printf("\"\n");
@@ -652,18 +665,31 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    if (extensions_end != buffer_length)
+    if (extensions_end > buffer_length)
     {
-        fprintf(stderr, "WARNING! Extensions' end doesn't match buffer end (%u, %u).\n", extensions_end, buffer_length);
+        fprintf(stderr, "WARNING! Extensions end after buffer ends (%u, %u).\n", extensions_end, buffer_length);
         extensions_length = 0;
         extensions_start = 0;
         extensions_end = 0;
         if (json)
-            printf(", \"trailing data\": \"");
+            printf(", \"trailing_data\": \"");
         else
             printf("Trailing data: \n");
 
         print_hex_blob(buffer, extensions_pos, (buffer_length - (extensions_pos + 1)), 0, 0, json);
+
+        if (json)
+            printf("\"\n");
+    }
+    else if (extensions_end < buffer_length)
+    {
+        fprintf(stderr, "WARNING! Extensions end before buffer ends (%u, %u).\n", extensions_end, buffer_length);
+        if (json)
+            printf(", \"trailing_data\": \"");
+        else
+            printf("Trailing data: \n");
+
+        print_hex_blob(buffer, extensions_end, (buffer_length - (extensions_end + 1)), 0, 0, json);
 
         if (json)
             printf("\"\n");
