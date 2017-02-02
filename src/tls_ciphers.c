@@ -356,6 +356,37 @@ char *cipher_name(unsigned code)
             break;
     
 
+        case OLD_TLS_RSA_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_RSA_WITH_SEED_CBC_SHA";
+            break;
+    
+
+        case OLD_TLS_DH_DSS_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_DH_DSS_WITH_SEED_CBC_SHA";
+            break;
+    
+
+        case OLD_TLS_DH_RSA_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_DH_RSA_WITH_SEED_CBC_SHA";
+            break;
+    
+
+        case OLD_TLS_DHE_DSS_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_DHE_DSS_WITH_SEED_CBC_SHA";
+            break;
+    
+
+        case OLD_TLS_DHE_RSA_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_DHE_RSA_WITH_SEED_CBC_SHA";
+            break;
+    
+
+        case OLD_TLS_DH_anon_WITH_SEED_CBC_SHA:
+            return "OLD_TLS_DH_anon_WITH_SEED_CBC_SHA";
+            break;
+    
+
+
         case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
             return "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256";
             break;
