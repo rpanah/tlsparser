@@ -28,6 +28,7 @@ int main(int argc, char **argv)
     unsigned long buffer_size = 0;
     int i;
     int json = 0;
+    int raw = 0;
     int version = 0;
     int record_type = 0;
     unsigned int record_length = 0;
@@ -39,6 +40,10 @@ int main(int argc, char **argv)
         {
             json = 1;
         }
+        else if (strcmp(argv[i], "--raw") == 0 || strcmp(argv[i], "-r") == 0)
+        {
+            raw = 1;
+        }
         else
             f = fopen(argv[i], "rb");
     }
@@ -49,8 +54,6 @@ int main(int argc, char **argv)
             fprintf(stderr, "No input file given, using standard input.\n");
         f = stdin;
     }
-    else
-        f = fopen(argv[1], "rb");
 
     if (!f)
     {
@@ -87,18 +90,21 @@ int main(int argc, char **argv)
     if (json)
         printf("{\n");
 
-    if (json)
+    if (raw)
     {
-        printf("\"raw\": \"");
-        print_hex_blob(buffer, 0, buffer_size, 0, 0);
-        printf("\",\n");
-    }
-    else
-    {
-        printf("Input read (%lu bytes): \n", buffer_size);
-        for(i = 0; i < buffer_size; i++)
-            printf("%c", buffer[i]);
-        printf("\n");
+        if (json)
+        {
+            printf("\"raw\": \"");
+            print_hex_blob(buffer, 0, buffer_size, 0, 0);
+            printf("\",\n");
+        }
+        else
+        {
+            printf("Input read (%lu bytes): \n", buffer_size);
+            for(i = 0; i < buffer_size; i++)
+                printf("%c", buffer[i]);
+            printf("\n");
+        }
     }
 
     if (json)
@@ -169,7 +175,7 @@ int main(int argc, char **argv)
                 printf("\",\n\"record_data\": {");
             else
                 printf("\n");
-            process_handshake(buffer, buffer_size, json);
+            process_handshake(buffer, buffer_size, json, raw);
             if (json)
                 printf("}");
             break;

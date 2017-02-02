@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-struct handshake_message *process_handshake(void *data, int buffer_length, int json)
+struct handshake_message *process_handshake(void *data, int buffer_length, int json, int raw)
 {
     unsigned char *buffer = data;
     unsigned handshake_type = 0;
@@ -39,7 +39,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
             printf("CLIENT_HELLO");
             if (json)
                 printf("\", \"handshake_data\": {\n");
-            process_handshake_client_hello(buffer, buffer_length, json);
+            process_handshake_client_hello(buffer, buffer_length, json, raw);
             if (json)
                 printf("}\n");
             break;
@@ -47,7 +47,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
             printf("SERVER_HELLO");
             if (json)
                 printf("\", \"handshake_data\": {\n");
-            process_handshake_server_hello(buffer, buffer_length, json);
+            process_handshake_server_hello(buffer, buffer_length, json, raw);
             if (json)
                 printf("}\n");
             break;
@@ -105,7 +105,7 @@ struct handshake_message *process_handshake(void *data, int buffer_length, int j
     return 0;
 }
 
-struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length, int json)
+struct hadnshake_client_hello *process_handshake_client_hello(void *data, int buffer_length, int json, int raw)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
@@ -355,9 +355,14 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         {
             if (i != 0)
                 printf(",\n");
-            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u, \"raw\": \"", name, extension_id, extension_data_length);
-            print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
-            printf("\", \"data\": {");
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u", name, extension_id, extension_data_length);
+            if (raw)
+            {
+                printf(", \"raw\": \"");
+                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+                printf("\"");
+            }
+            printf(", \"data\": {");
         }
         else
             printf("\t%s (id = %u len = %u))\n", name, extension_id, extension_data_length);
@@ -481,7 +486,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
     return 0;
 }
 
-struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length, int json)
+struct hadnshake_server_hello *process_handshake_server_hello(void *data, int buffer_length, int json, int raw)
 {
     unsigned char *buffer = data;
     unsigned tls_version = 0;
@@ -690,9 +695,14 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         {
             if (i != 0)
                 printf(",\n");
-            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u, \"raw\": \"", name, extension_id, extension_data_length);
-            print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
-            printf("\", \"data\": {");
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u", name, extension_id, extension_data_length);
+            if (raw)
+            {
+                printf(", \"raw\": \"");
+                print_hex_blob((char *)buffer, pos, extension_data_length, 0, 0);
+                printf("\"");
+            }
+            printf(", \"data\": {");
         }
         else
             printf("\t%s (id = %u len = %u))\n", name, extension_id, extension_data_length);
