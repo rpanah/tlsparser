@@ -68,5 +68,6 @@
 #define TLS_1_0                 0x0301  /* 3,1 */
 #define TLS_1_1                 0x0302  /* 3,2 */
 #define TLS_1_2                 0x0303  /* 3,3 */
+#define TLS_1_3                 0x0304  /* 3,4 */
 
 #endif

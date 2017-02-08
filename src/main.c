@@ -134,6 +134,11 @@ int main(int argc, char **argv)
             if (json)
                 printf("\"");
             break;
+        case TLS_1_3:
+            printf("TLSv1.3");
+            if (json)
+                printf("\"");
+            break;
         default:
             printf("unknown (%d)", version);
             if (json)
