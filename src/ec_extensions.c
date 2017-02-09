@@ -26,7 +26,7 @@ void parse_supported_groups(char *data, unsigned offset, unsigned length, int js
             fprintf(stderr, "WARNING! Unknown elliptic curve (%#.04x)\n", curve_code);
         }
         if (json)
-            printf("{\"name\": \"%s\", \"code\": \"%#.04x\"}", name, curve_code);
+            printf("{\"name\": \"%s\", \"id\": \"%#.04x\"}", name, curve_code);
         else
             printf("\t\t%s\n", name);
         i++;
@@ -198,7 +198,7 @@ void parse_point_formats(char *data, unsigned offset, unsigned length, int json)
             fprintf(stderr, "WARNING! Unknown point format (%#.02x)\n", point_format_code);
         }
         if (json)
-            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", name, point_format_code);
+            printf("{\"name\": \"%s\", \"id\": \"%#.02x\"}", name, point_format_code);
         else
             printf("\t\t%s\n", name);
         i++;

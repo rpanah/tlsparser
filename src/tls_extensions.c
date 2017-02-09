@@ -245,10 +245,10 @@ void parse_signature_algorithms(char *data, unsigned offset, unsigned length, in
         if (name == NULL)
         {
             name = "unknown";
-            fprintf(stderr, "WARNING! Unknown signature algorithm (%#.02x)\n", sigalg_code);
+            fprintf(stderr, "WARNING! Unknown signature algorithm (%#.4x)\n", sigalg_code);
         }
         if (json)
-            printf("{\"name\": \"%s\", \"code\": \"%#.02x\"}", name, sigalg_code);
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, sigalg_code);
         else
             printf("\t\t%s\n", name);
         i++;

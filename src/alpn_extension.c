@@ -25,7 +25,7 @@ void parse_alpns(char *data, unsigned offset, unsigned length, int json)
         {
             if (i != 0)
                 printf(", ");
-            printf("{\"code\": \"%s\"", alpn_code);
+            printf("{\"id\": \"%s\"", alpn_code);
         }
         else
             printf("\t\t%s", alpn_code);//alpn_name(alpn_code));

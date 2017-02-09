@@ -218,15 +218,15 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         if(!name)
         {
             if (json)
-                printf("\"unknown (%.04x)\"", cipher);
+                printf("\"unknown (%.4x)\"", cipher);
             i++;
-            fprintf(stderr, "WARNING: Unknown cipher suite %#04x!\n", cipher);
+            fprintf(stderr, "WARNING: Unknown cipher suite %#4x!\n", cipher);
             continue;
         }
         if (json)
-            printf("\t\"%s (%#.04x)\"", name, cipher);
+            printf("\t{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, cipher);
         else
-            printf("\t%s (%#.04x)\n", name, cipher);
+            printf("\t%s (%#.4x)\n", name, cipher);
         i++;
     }
 
@@ -261,7 +261,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
             switch (compression)
             {
                 default:
-                    fprintf(stderr, "WARNING: Unknown compression method %#04x!\n", compression);
+                    fprintf(stderr, "WARNING: Unknown compression method %#4x!\n", compression);
                     break;
                 case COMP_NULL:
                     if (json)
@@ -355,7 +355,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         {
             if (i != 0)
                 printf(",\n");
-            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u", name, extension_id, extension_data_length);
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#.4x\", \"length\": %u", name, extension_id, extension_data_length);
             if (raw)
             {
                 printf(", \"raw\": \"");
@@ -371,7 +371,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         {
             default:
                 if (name == NULL)
-                    fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
+                    fprintf(stderr, "WARNING: Unknown extension %#4x!\n", extension_id);
                 break;
 
             case EXT_SERVER_NAME:
@@ -584,16 +584,16 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     char *name = cipher_name(cipher);
     if(!name)
     {
-        fprintf(stderr, "WARNING: Unknown cipher suite %#04x!\n", cipher);
+        fprintf(stderr, "WARNING: Unknown cipher suite %#4x!\n", cipher);
         if (json)
-            printf("\"unknown (%.04x)\"", cipher);
+            printf("\"unknown (%.4x)\"", cipher);
     }
     else
     {
         if (json)
-            printf("\"%s (%#.04x)\"", name, cipher);
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, cipher);
         else
-            printf("\t%s (%#.04x)\n", name, cipher);
+            printf("\t%s (%#.4x)\n", name, cipher);
     }
 
     pos = pos + HANDSHAKE_CH_CIPHER_LEN;
@@ -608,9 +608,9 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     switch (compression)
     {
         default:
-            fprintf(stderr, "WARNING: Unknown compression method %#04x!\n", compression);
+            fprintf(stderr, "WARNING: Unknown compression method %#4x!\n", compression);
             if (json)
-                printf("\"UNKNOWN (%#.04x)\"", compression);
+                printf("\"UNKNOWN (%#.4x)\"", compression);
             break;
         case COMP_NULL:
             if (json)
@@ -688,14 +688,14 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         pos += HANDSHAKE_CH_EXTENSION_ID_LEN;
         unsigned extension_data_length = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN);
         pos += HANDSHAKE_CH_EXTENSION_DATA_LENGTH_LEN;
-        /* printf("%#04x ", cipher); */
+        /* printf("%#4x ", cipher); */
         const char *name = extension_name(extension_id);
 
         if (json)
         {
             if (i != 0)
                 printf(",\n");
-            printf("\t{ \"name\": \"%s\", \"id\": \"%#04x\", \"length\": %u", name, extension_id, extension_data_length);
+            printf("\t{ \"name\": \"%s\", \"id\": \"%#.4x\", \"length\": %u", name, extension_id, extension_data_length);
             if (raw)
             {
                 printf(", \"raw\": \"");
@@ -711,7 +711,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
         {
             default:
                 if (name == NULL)
-                    fprintf(stderr, "WARNING: Unknown extension %#04x!\n", extension_id);
+                    fprintf(stderr, "WARNING: Unknown extension %#4x!\n", extension_id);
                 break;
 
             case EXT_SERVER_NAME:
