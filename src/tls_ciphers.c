@@ -777,6 +777,31 @@ char *cipher_name(unsigned code)
             break;
     
 
+        case TLS_AES_128_GCM_SHA256:
+            return "TLS_AES_128_GCM_SHA256";
+            break;
+    
+
+        case TLS_AES_256_GCM_SHA384:
+            return "TLS_AES_256_GCM_SHA384";
+            break;
+    
+
+        case TLS_CHACHA20_POLY1305_SHA256:
+            return "TLS_CHACHA20_POLY1305_SHA256";
+            break;
+    
+
+        case TLS_AES_128_CCM_SHA256:
+            return "TLS_AES_128_CCM_SHA256";
+            break;
+    
+
+        case TLS_AES_128_CCM_8_SHA256:
+            return "TLS_AES_128_CCM_8_SHA256";
+            break;
+    
+
         case TLS_FALLBACK_SCSV:
             return "TLS_FALLBACK_SCSV";
             break;
