@@ -3,6 +3,8 @@
 
 char *cipher_name(unsigned cipher);
 
+// https://github.com/jmhodges/howsmyssl/blob/master/all_suites.go
+
 #define TLS_NULL_WITH_NULL_NULL \
 	0x00
 #define TLS_NULL_WITH_NULL_NULL_STR \
