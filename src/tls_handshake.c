@@ -218,7 +218,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         if(!name)
         {
             if (json)
-                printf("\"unknown (%.4x)\"", cipher);
+                printf("\t{\"name\": \"unknown\", \"id\": \"%#.4x\"}", cipher);
             i++;
             fprintf(stderr, "WARNING: Unknown cipher suite %#4x!\n", cipher);
             continue;
@@ -586,7 +586,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
     {
         fprintf(stderr, "WARNING: Unknown cipher suite %#4x!\n", cipher);
         if (json)
-            printf("\"unknown (%.4x)\"", cipher);
+            printf("\t{\"name\": \"unknown\", \"id\": \"%#.4x\"}", cipher);
     }
     else
     {
