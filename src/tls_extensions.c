@@ -287,6 +287,26 @@ const char *sigalg_name(unsigned code) {
             return "ECDSA_SHA1";
             break;
 
+        case  TLSEXT_SIGALG_TLS13_RSA_PSS_SHA256:
+            return "TLS13_RSA_PSS_SHA256";
+            break;
+
+        case  TLSEXT_SIGALG_TLS13_RSA_PSS_SHA384:
+            return "TLS13_RSA_PSS_SHA384";
+            break;
+
+        case TLSEXT_SIGALG_TLS13_RSA_PSS_SHA512:
+            return "TLS13_RSA_PSS_SHA512";
+            break;
+
+        case TLSEXT_SIGALG_TLS13_ED25519:
+            return "TLS13_ED25519";
+            break;
+
+        case TLSEXT_SIGALG_TLS13_ED448:
+            return "TLS13_ED448";
+            break;
+
         case  TLSEXT_SIGALG_RSA_PSS_SHA256:
             return "RSA_PSS_SHA256";
             break;
