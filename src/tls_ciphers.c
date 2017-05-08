@@ -664,19 +664,19 @@ char *cipher_name(unsigned code)
         case 0xc0af:
             return "TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8";
         case 0xcca8:
-            return "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305";
+            return "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
         case 0xcca9:
-            return "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305";
+            return "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256";
         case 0xccaa:
-            return "TLS_DHE_RSA_WITH_CHACHA20_POLY1305";
+            return "TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
         case 0xccab:
-            return "TLS_PSK_WITH_CHACHA20_POLY1305";
+            return "TLS_PSK_WITH_CHACHA20_POLY1305_SHA256";
         case 0xccac:
-            return "TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305";
+            return "TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256";
         case 0xccad:
-            return "TLS_DHE_PSK_WITH_CHACHA20_POLY1305";
+            return "TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256_SHA256";
         case 0xccae:
-            return "TLS_RSA_PSK_WITH_CHACHA20_POLY1305";
+            return "TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256";
         case 0x5600:
             return "TLS_FALLBACK_SCSV";
         case 0xc001:
