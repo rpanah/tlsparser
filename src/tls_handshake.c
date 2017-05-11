@@ -187,6 +187,8 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
         case TLS_1_2:
             printf("TLSv1.2");
             break;
+        case TLS_1_3:
+            printf("TLSv1.3");
         default:
             printf("unknown (%d)", tls_version);
     }
