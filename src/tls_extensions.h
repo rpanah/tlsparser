@@ -38,10 +38,24 @@ const char *sigalg_name(unsigned code);
 #define EXT_TOKEN_BINDING                               24
 #define EXT_CACHED_INFO                                 25
 #define EXT_SESSION_TICKET_TLS                          35
+#define EXT_EXTENDED_RANDOM                             40
+#define EXT_PRE_SHARED_KEY                              41
+#define EXT_EARLY_DATA                                  42
+#define EXT_SUPPORTED_VERSIONS                          43
+#define EXT_COOKIE                                      44
+#define EXT_PSK_KEY_EXCHANGE_MODES                      45
+#define EXT_TICKET_EARLY_DATA_INFO                      46
+#define EXT_CERTIFICATE_AUTHORITIES                     47
+#define EXT_OID_FILTERS                                 48
 #define OLD_EXT_NEXT_PROTOCOL_NEGOTIATION               13172
+#define EXT_ORIGIN_BOUND_CERTIFICATES                   13175
+#define EXT_ENCRYPTED_CLIENT_CERTIFICATES               13180
+#define EXT_TOKEN_BINDING_TEST                          21760
 #define OLD_EXT_CHANNEL_ID                              30031
 #define EXT_CHANNEL_ID                                  30032
+#define EXT_NEW_PADDING                                     35655
 #define EXT_RENEGOTIATION_INFO                          65281
+#define EXT_TLS_DRAFT                                   65282
 #define EXT_SHORT_HEADER                                65283 // https://nss-review.dev.mozaws.net/D122
 
 #define SNI_TYPE_LENGTH                                 1

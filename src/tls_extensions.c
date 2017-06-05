@@ -123,8 +123,56 @@ const char *extension_name(unsigned code)
             return "SESSION_TICKET_TLS";
             break;
 
+        case  EXT_EXTENDED_RANDOM:
+            return "EXTENDED_RANDOM";
+            break;
+
+        case  EXT_PRE_SHARED_KEY:
+            return "PRE_SHARED_KEY";
+            break;
+
+        case  EXT_EARLY_DATA:
+            return "EARLY_DATA";
+            break;
+
+        case  EXT_SUPPORTED_VERSIONS:
+            return "SUPPORTED_VERSIONS";
+            break;
+
+        case  EXT_COOKIE:
+            return "COOKIE";
+            break;
+
+        case  EXT_PSK_KEY_EXCHANGE_MODES:
+            return "PSK_KEY_EXCHANGE_MODES";
+            break;
+
+        case  EXT_TICKET_EARLY_DATA_INFO:
+            return "TICKET_EARLY_DATA_INFO";
+            break;
+
+        case  EXT_CERTIFICATE_AUTHORITIES:
+            return "CERTIFICATE_AUTHORITIES";
+            break;
+
+        case  EXT_OID_FILTERS:
+            return "OID_FILTERS";
+            break;
+
         case OLD_EXT_NEXT_PROTOCOL_NEGOTIATION:
             return "NEXT_PROTOCOL_NEGOTIATION";
+            break;
+
+        case EXT_ORIGIN_BOUND_CERTIFICATES:
+            return "ORIGIN_BOUND_CERTIFICATES";
+            break;
+
+        case EXT_ENCRYPTED_CLIENT_CERTIFICATES:
+            return "ENCRYPTED_CLIENT_CERTIFICATES";
+            break;
+
+        case EXT_TOKEN_BINDING_TEST:
+            return "TOKEN_BINDING_TEST";
             break;
 
         case OLD_EXT_CHANNEL_ID:
@@ -135,8 +183,16 @@ const char *extension_name(unsigned code)
             return "CHANNEL_ID";
             break;
 
+        case EXT_NEW_PADDING:
+            return "NEW_PADDING";
+            break;
+
         case EXT_RENEGOTIATION_INFO:
             return "RENEGOTIATION_INFO";
+            break;
+
+        case EXT_TLS_DRAFT:
+            return "TLS_DRAFT";
             break;
 
         case EXT_SHORT_HEADER:
