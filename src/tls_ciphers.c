@@ -72,7 +72,7 @@ char *cipher_name(unsigned code)
         case 0x001d:
             return "SSL_FORTEZZA_KEA_WITH_FORTEZZA_CBC_SHA";
         case 0x001e:
-            return "SSL_FORTEZZA_KEA_WITH_RC4_128_SHA";
+            return "TLS_KRB5_WITH_DES_CBC_SHA";
         case 0x001f:
             return "TLS_KRB5_WITH_3DES_EDE_CBC_SHA";
         case 0x0020:
@@ -709,6 +709,14 @@ char *cipher_name(unsigned code)
             return "TLS_GOST2012_WITH_GOST8912_GOST8912";
         case 0xff87:
             return "TLS_GOST2012_WITH_NULL_GOST12";
+        case 0xd001:
+            return "TLS_ECDHE_PSK_WITH_AES_128_GCM_SHA256";
+        case 0xd002:
+            return "TLS_ECDHE_PSK_WITH_AES_256_GCM_SHA384";
+        case 0xd003:
+            return "TLS_ECDHE_PSK_WITH_AES_128_CCM_8_SHA256";
+        case 0xd005:
+            return "TLS_ECDHE_PSK_WITH_AES_128_CCM_SHA256";
         case 0x0a0a:
         case 0x1a1a:
         case 0x2a2a:
