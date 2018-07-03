@@ -159,6 +159,18 @@ const char *extension_name(unsigned code)
             return "OID_FILTERS";
             break;
 
+        case  EXT_POST_HANDSHAKE_AUTH:
+            return "POST_HANDSHAKE_AUTH";
+            break;
+
+        case  EXT_SIGNATURE_ALGORITHMS_CERT:
+            return "SIGNATURE_ALGORITHMS_CERT";
+            break;
+
+        case  EXT_KEY_SHARE:
+            return "KEY_SHARE";
+            break;
+
         case OLD_EXT_NEXT_PROTOCOL_NEGOTIATION:
             return "NEXT_PROTOCOL_NEGOTIATION";
             break;
