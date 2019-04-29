@@ -473,6 +473,18 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int bu
 
             case EXT_RENEGOTIATION_INFO:
                 break;
+
+            case EXT_SUPPORTED_VERSIONS:
+                parse_ch_supported_versions((char *) buffer, pos, extension_data_length, json);
+                break;
+
+            case EXT_KEY_SHARE:
+                parse_ch_key_share((char *) buffer, pos, extension_data_length, json);
+                break;
+
+            case EXT_PSK_KEY_EXCHANGE_MODES:
+                parse_ch_psk_key_exchange_modes((char *) buffer, pos, extension_data_length, json);
+                break;
         }
         if (json)
             printf("}}");
@@ -812,6 +824,14 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int bu
                 break;
 
             case EXT_RENEGOTIATION_INFO:
+                break;
+
+            case EXT_SUPPORTED_VERSIONS:
+                parse_sh_supported_versions((char *) buffer, pos, extension_data_length, json);
+                break;
+
+            case EXT_KEY_SHARE:
+                parse_sh_key_share((char *) buffer, pos, extension_data_length, json);
                 break;
         }
         if (json)

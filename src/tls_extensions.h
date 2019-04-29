@@ -8,6 +8,17 @@ const char *extension_name(unsigned extension_id);
 const char *sni_type_name(unsigned code);
 struct tls_sni *parse_sni(char *data, unsigned offset, unsigned length, int json);
 
+void parse_ch_supported_versions(char *data, unsigned offset, unsigned length, int json);
+void parse_sh_supported_versions(char *data, unsigned offset, unsigned length, int json);
+const char *version_name(unsigned code);
+
+void parse_ch_key_share(char *data, unsigned offset, unsigned length, int json);
+void parse_sh_key_share(char *data, unsigned offset, unsigned length, int json);
+const char *key_share_group_name(unsigned code);
+
+void parse_ch_psk_key_exchange_modes(char *data, unsigned offset, unsigned length, int json);
+const char *psk_key_exchange_mode_name(unsigned code);
+
 void parse_signature_algorithms(char *data, unsigned offset, unsigned length, int json);
 const char *sigalg_name(unsigned code);
 
@@ -67,8 +78,17 @@ const char *sigalg_name(unsigned code);
 
 /* Signature algorithms */
 
+#define VERSION_SET_LENGTH                               1
+#define VERSION_LENGTH                                   2
+
 #define SIGALG_SET_LENGTH                               2
 #define SIGALG_LENGTH                                   2
+
+#define KEY_SHARE_LENGTH                                2
+#define KEY_SHARE_GROUP_CODE_LENGTH                     2
+#define KEY_SHARE_KEY_EXCHANGE_LENGTH                   2
+
+#define PSK_MODES_LENGTH                                1
 
 #define TLSEXT_SIGALG_ECDSA_SECP224R1_SHA224                    0x0303
 #define TLSEXT_SIGALG_ECDSA_SECP256R1_SHA256                    0x0403
@@ -107,5 +127,45 @@ const char *sigalg_name(unsigned code);
 #define TLSEXT_SIGALG_GOSTR34102012_256_GOSTR34112012_256       0xeeee
 #define TLSEXT_SIGALG_GOSTR34102012_512_GOSTR34112012_512       0xefef
 #define TLSEXT_SIGALG_GOSTR34102001_GOSTR3411                   0xeded
+
+#define TLSEXT_GROUP_sect163k1                                  0x0001
+#define TLSEXT_GROUP_sect163r1                                  0x0002
+#define TLSEXT_GROUP_sect163r2                                  0x0003
+#define TLSEXT_GROUP_sect193r1                                  0x0004
+#define TLSEXT_GROUP_sect193r2                                  0x0005
+#define TLSEXT_GROUP_sect233k1                                  0x0006
+#define TLSEXT_GROUP_sect233r1                                  0x0007
+#define TLSEXT_GROUP_sect239k1                                  0x0008
+#define TLSEXT_GROUP_sect283k1                                  0x0009
+#define TLSEXT_GROUP_sect283r1                                  0x000a
+#define TLSEXT_GROUP_sect409k1                                  0x000b
+#define TLSEXT_GROUP_sect409r1                                  0x000c
+#define TLSEXT_GROUP_sect571k1                                  0x000d
+#define TLSEXT_GROUP_sect571r1                                  0x000e
+#define TLSEXT_GROUP_secp160k1                                  0x000f
+#define TLSEXT_GROUP_secp160r1                                  0x0010
+#define TLSEXT_GROUP_secp160r2                                  0x0011
+#define TLSEXT_GROUP_secp192k1                                  0x0012
+#define TLSEXT_GROUP_secp192r1                                  0x0013
+#define TLSEXT_GROUP_secp224k1                                  0x0014
+#define TLSEXT_GROUP_secp224r1                                  0x0015
+#define TLSEXT_GROUP_secp256k1                                  0x0016
+#define TLSEXT_GROUP_secp256r1                                  0x0017
+#define TLSEXT_GROUP_secp384r1                                  0x0018
+#define TLSEXT_GROUP_secp521r1                                  0x0019
+#define TLSEXT_GROUP_brainpoolP256r1                            0x001a
+#define TLSEXT_GROUP_brainpoolP384r1                            0x001b
+#define TLSEXT_GROUP_brainpoolP512r1                            0x001c
+#define TLSEXT_GROUP_ecdh_x25519                                0x001d
+#define TLSEXT_GROUP_ffdhe2048                                  0x0100
+#define TLSEXT_GROUP_ffdhe3072                                  0x0101
+#define TLSEXT_GROUP_ffdhe4096                                  0x0102
+#define TLSEXT_GROUP_ffdhe6144                                  0x0103
+#define TLSEXT_GROUP_ffdhe8192                                  0x0104
+#define TLSEXT_GROUP_arbitrary_explicit_prime_curves            0xff01
+#define TLSEXT_GROUP_arbitrary_explicit_char2_curves            0xff02
+
+#define TLSEXT_PSK_KE                                           0x0000
+#define TLSEXT_PSK_DHE_KE                                       0x0001
 
 #endif /* __TLS_EXTENSIONS_H */

@@ -293,6 +293,369 @@ const char *sni_type_name(unsigned code)
     }
 }
 
+void parse_ch_psk_key_exchange_modes(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned psk_key_exchange_modes_length = read_uint(data, pos, PSK_MODES_LENGTH);
+    unsigned mode_code = 0;
+    const char *name = NULL;
+    int i = 0;
+    pos += PSK_MODES_LENGTH;
+    if (json)
+        printf("\"psk_key_exchange_mode_list\": [");
+    for(; pos < offset + length; pos += PSK_MODES_LENGTH)
+    {
+        if (json && i != 0)
+            printf(", ");
+        mode_code = read_uint(data, pos, PSK_MODES_LENGTH);
+        name = psk_key_exchange_mode_name(mode_code);
+
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown PSK key exchange mode code (%#.4x)\n", mode_code);
+        }
+        if (json)
+        {
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"]", name, mode_code);
+            printf("\"}");
+        }
+        else
+        {
+            printf("\t\tpsk key exchange mode: %s (id = %#.4x)\n", name, mode_code);
+        }
+        i++;
+    }
+    if(json)
+        printf("]");
+}
+
+const char *psk_key_exchange_mode_name(unsigned code)
+{
+    switch (code)
+    {
+        default:
+            return "UNKNOWN_PSK_EXCHANGE_MODE";
+            break;
+        case TLSEXT_PSK_KE:
+            return "PSK_KE";
+            break;
+        case TLSEXT_PSK_DHE_KE:
+            return "PSK_DHE_KE";
+            break;
+    }
+}
+
+void parse_ch_key_share(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned key_share_length = read_uint(data, pos, KEY_SHARE_LENGTH);
+    unsigned group_code = 0;
+    unsigned key_exchange_length = 0;
+    const char *name = NULL;
+    int i = 0;
+    pos += KEY_SHARE_LENGTH;
+    if (json)
+        printf("\"key_share_list\": [");
+    for(; pos < offset + length; pos += key_exchange_length)
+    {
+        if (json && i != 0)
+            printf(", ");
+        group_code = read_uint(data, pos, KEY_SHARE_GROUP_CODE_LENGTH);
+        name = key_share_group_name(group_code);
+        pos += KEY_SHARE_GROUP_CODE_LENGTH;
+        key_exchange_length = read_uint(data, pos, KEY_SHARE_KEY_EXCHANGE_LENGTH);
+        pos += KEY_SHARE_KEY_EXCHANGE_LENGTH;
+
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown group code (%#.4x)\n", group_code);
+        }
+        if (json)
+        {
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\", \"key_exchange_length\": \"%d\",", name, group_code, key_exchange_length);
+            printf("\"key_exchange\": \"");
+            print_hex_blob(data, pos, key_exchange_length, 0, 0, json);
+            printf("\"}");
+        }
+        else
+        {
+            printf("\t\tgroup: %s (id = %#.4x) key_exchange_length: %d\n", name, group_code, key_exchange_length);
+            printf("\t\t\tkey_exchange: ");
+            print_hex_blob(data, pos, key_exchange_length, 0, 0, 0);
+            printf("\n");
+        }
+        i++;
+    }
+    if(json)
+        printf("]");
+}
+
+void parse_sh_key_share(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned group_code = 0;
+    unsigned key_exchange_length = 0;
+    const char *name = NULL;
+    int i = 0;
+    if (json)
+      printf("\"key_share\": ");
+    group_code = read_uint(data, pos, KEY_SHARE_GROUP_CODE_LENGTH);
+    name = key_share_group_name(group_code);
+    pos += KEY_SHARE_GROUP_CODE_LENGTH;
+    key_exchange_length = read_uint(data, pos, KEY_SHARE_KEY_EXCHANGE_LENGTH);
+    pos += KEY_SHARE_KEY_EXCHANGE_LENGTH;
+    if (name == NULL)
+    {
+        name = "unknown";
+        fprintf(stderr, "WARNING! Unknown group code (%#.4x)\n", group_code);
+    }
+    if (json)
+    {
+        printf("{\"name\": \"%s\", \"id\": \"%#.4x\", \"key_exchange_length\": \"%d\",", name, group_code, key_exchange_length);
+        printf("\"key_exchange\": \"");
+        print_hex_blob(data, pos, key_exchange_length, 0, 0, json);
+        printf("\"}");
+    }
+    else
+    {
+        printf("\t\tgroup: %s (id = %#.4x) key_exchange_length: %d\n", name, group_code, key_exchange_length);
+        printf("\t\t\tkey_exchange: ");
+        print_hex_blob(data, pos, key_exchange_length, 0, 0, 0);
+        printf("\n");
+    }
+}
+
+const char *key_share_group_name(unsigned code)
+{
+    switch (code)
+    {
+        default:
+            return "KEY_SHARE_UNKNOWN_GROUP";
+            break;
+        case TLSEXT_GROUP_sect163k1:
+            return "sect163k1 (K-163)";
+            break;
+        case TLSEXT_GROUP_sect163r1:
+            return "sect163r1";
+            break;
+        case TLSEXT_GROUP_sect163r2:
+            return "sect163r2 (B-163)";
+            break;
+        case TLSEXT_GROUP_sect193r1:
+            return "sect193r1";
+            break;
+        case TLSEXT_GROUP_sect193r2:
+            return "sect193r2";
+            break;
+        case TLSEXT_GROUP_sect233k1:
+            return "sect233k1 (K-233)";
+            break;
+        case TLSEXT_GROUP_sect233r1:
+            return "sect233r1 (B-233)";
+            break;
+        case TLSEXT_GROUP_sect239k1:
+            return "sect239k1";
+            break;
+        case TLSEXT_GROUP_sect283k1:
+            return "sect283k1 (K-283)";
+            break;
+        case TLSEXT_GROUP_sect283r1:
+            return "sect283r1 (B-283)";
+            break;
+        case TLSEXT_GROUP_sect409k1:
+            return "sect409k1 (K-409)";
+            break;
+        case TLSEXT_GROUP_sect409r1:
+            return "sect409r1 (B-409)";
+            break;
+        case TLSEXT_GROUP_sect571k1:
+            return "sect571k1 (K-571)";
+            break;
+        case TLSEXT_GROUP_sect571r1:
+            return "sect571r1 (B-571)";
+            break;
+        case TLSEXT_GROUP_secp160k1:
+            return "secp160k1";
+            break;
+        case TLSEXT_GROUP_secp160r1:
+            return "secp160r1";
+            break;
+        case TLSEXT_GROUP_secp160r2:
+            return "secp160r2";
+            break;
+        case TLSEXT_GROUP_secp192k1:
+            return "secp192k1";
+            break;
+        case TLSEXT_GROUP_secp192r1:
+            return "secp192r1 (P-192)";
+            break;
+        case TLSEXT_GROUP_secp224k1:
+            return "secp224k1";
+            break;
+        case TLSEXT_GROUP_secp224r1:
+            return "secp224r1 (P-224)";
+            break;
+        case TLSEXT_GROUP_secp256k1:
+            return "secp256k1";
+            break;
+        case TLSEXT_GROUP_secp256r1:
+            return "secp256r1 (P-256)";
+            break;
+        case TLSEXT_GROUP_secp384r1:
+            return "secp384r1 (P-384)";
+            break;
+        case TLSEXT_GROUP_secp521r1:
+            return "secp521r1 (P-521)";
+            break;
+        case TLSEXT_GROUP_brainpoolP256r1:
+            return "brainpoolP256r1";
+            break;
+        case TLSEXT_GROUP_brainpoolP384r1:
+            return "brainpoolP384r1";
+            break;
+        case TLSEXT_GROUP_brainpoolP512r1:
+            return "brainpoolP512r1";
+            break;
+        case TLSEXT_GROUP_ecdh_x25519:
+            return "ecdh_x25519";
+            break;
+        case TLSEXT_GROUP_ffdhe2048:
+            return "ffdhe2048";
+            break;
+        case TLSEXT_GROUP_ffdhe3072:
+            return "ffdhe3072";
+            break;
+        case TLSEXT_GROUP_ffdhe4096:
+            return "ffdhe4096";
+            break;
+        case TLSEXT_GROUP_ffdhe6144:
+            return "ffdhe6144";
+            break;
+        case TLSEXT_GROUP_ffdhe8192:
+            return "ffdhe8192";
+            break;
+        case TLSEXT_GROUP_arbitrary_explicit_prime_curves:
+            return "arbitrary_explicit_prime_curves";
+            break;
+        case TLSEXT_GROUP_arbitrary_explicit_char2_curves:
+            return "arbitrary_explicit_char2_curves";
+            break;
+        case 0x0a0a:
+        case 0x1a1a:
+        case 0x2a2a:
+        case 0x3a3a:
+        case 0x4a4a:
+        case 0x5a5a:
+        case 0x6a6a:
+        case 0x7a7a:
+        case 0x8a8a:
+        case 0x9a9a:
+        case 0xaaaa:
+        case 0xbaba:
+        case 0xcaca:
+        case 0xdada:
+        case 0xeaea:
+        case 0xfafa:
+            return "GOOGLE_GREASE";
+    }
+}
+
+void parse_ch_supported_versions(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned versions_length = read_uint(data, pos, VERSION_SET_LENGTH);
+    unsigned version_code;
+    const char *name = NULL;
+    int i = 0;
+    pos += VERSION_SET_LENGTH;
+
+    if (json)
+        printf("\"version_list\": [");
+    for(; pos < offset + length; pos += VERSION_LENGTH)
+    {
+        if (json && i != 0)
+            printf(", ");
+        version_code = read_uint(data, pos, VERSION_LENGTH);
+        name = version_name(version_code);
+        if (name == NULL)
+        {
+            name = "unknown";
+            fprintf(stderr, "WARNING! Unknown version (%#.4x)\n", version_code);
+        }
+        if (json)
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, version_code);
+        else
+            printf("\t\t%s\n", name);
+        i++;
+    }
+    if(json)
+        printf("]");
+}
+
+void parse_sh_supported_versions(char *data, unsigned offset, unsigned length, int json)
+{
+    unsigned pos = offset;
+    unsigned version_code;
+    const char *name = NULL;
+
+    if (json)
+        printf("\"version\": ");
+    version_code = read_uint(data, pos, VERSION_LENGTH);
+    name = version_name(version_code);
+    if (name == NULL)
+    {
+        name = "unknown";
+        fprintf(stderr, "WARNING! Unknown version (%#.4x)\n", version_code);
+    }
+    if (json)
+        printf("{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, version_code);
+    else
+        printf("\t\t%s\n", name);
+}
+
+const char *version_name(unsigned code) {
+    switch (code)
+    {
+        default:
+            return NULL;
+            break;
+        case SSL_3_0:
+            return "SSL_3_0";
+            break;
+        case TLS_1_0:
+            return "TLS_1_0";
+            break;
+        case TLS_1_1:
+            return "TLS_1_1";
+            break;
+        case TLS_1_2:
+            return "TLS_1_2";
+            break;
+        case TLS_1_3:
+            return "TLS_1_3";
+            break;
+        case 0x0a0a:
+        case 0x1a1a:
+        case 0x2a2a:
+        case 0x3a3a:
+        case 0x4a4a:
+        case 0x5a5a:
+        case 0x6a6a:
+        case 0x7a7a:
+        case 0x8a8a:
+        case 0x9a9a:
+        case 0xaaaa:
+        case 0xbaba:
+        case 0xcaca:
+        case 0xdada:
+        case 0xeaea:
+        case 0xfafa:
+            return "GOOGLE_GREASE";
+    }
+}
+
 void parse_signature_algorithms(char *data, unsigned offset, unsigned length, int json)
 {
     unsigned pos = offset;
