@@ -518,6 +518,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
     unsigned extensions_length = 0;
     unsigned extensions_start = 0;
     unsigned extensions_end = 0;
+    int hello_retry_request = 1;
 
     tls_version = read_uint(buffer, offset + HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
 
@@ -532,6 +533,28 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
         printf("\nRandom: ");
         print_hex_blob(buffer, offset + HANDSHAKE_CH_RANDOM_OFFSET, HANDSHAKE_CH_RANDOM_LEN, 0, 0, json);
         printf("\n");
+    }
+
+    for(i = 0; i < HANDSHAKE_CH_RANDOM_LEN; i++)
+    {
+        if ((char)buffer[offset + HANDSHAKE_CH_RANDOM_OFFSET + i] != TLS13_HELLO_RETRY_REQUEST_MAGIC[i])
+        {
+            hello_retry_request = 0;
+            break;
+        }
+    }
+
+    if (hello_retry_request)
+    {
+        if (json)
+            printf(",\n\"hello_retry_request\": \"1\"");
+        else
+            printf("Hello Retry Request Found\n");
+    }
+    else
+    {
+        if (json)
+            printf(",\n\"hello_retry_request\": \"0\"");
     }
 
     session_id_length = read_uint(buffer, offset + HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
@@ -696,6 +719,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
             printf("Extensions:\n");
     }
 
+    i = 0;
     for (pos = extensions_start; pos < extensions_end; )
     {
         unsigned extension_id = read_uint(buffer, pos, HANDSHAKE_CH_EXTENSION_ID_LEN);

@@ -15,6 +15,12 @@
 
 #define RECORD_LENGTH_OFFSET    3
 
+/* TLSv1.3 Magic    */
+
+#define TLS13_HELLO_RETRY_REQUEST_MAGIC \
+"\xCF\x21\xAD\x74\xE5\x9A\x61\x11\xBE\x1D\x8C\x02\x1E\x65\xB8\x91\xC2\xA2\x11\x16\x7A\xBB\x8C\x5E\x07\x9E\x09\xE2\xC8\xA8\x33\x9C"
+
+
 /* TLS record types */
 
 #define CHANGE_CIPHER_SPEC      0x14    /* 20 */
