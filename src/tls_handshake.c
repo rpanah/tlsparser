@@ -519,6 +519,8 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
     unsigned extensions_start = 0;
     unsigned extensions_end = 0;
     int hello_retry_request = 1;
+    int downgrade_12 = 1;
+    int downgrade_11 = 1;
 
     tls_version = read_uint(buffer, offset + HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
 
@@ -540,7 +542,17 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
         if ((char)buffer[offset + HANDSHAKE_CH_RANDOM_OFFSET + i] != TLS13_HELLO_RETRY_REQUEST_MAGIC[i])
         {
             hello_retry_request = 0;
-            break;
+        }
+        if (i > 23)
+        {
+            if ((char)buffer[offset + HANDSHAKE_CH_RANDOM_OFFSET + i] != TLS13_TLS12_DOWNGRADE_MARKER_MAGIC[i - 24])
+            {
+                downgrade_12 = 0;
+            }
+            if ((char)buffer[offset + HANDSHAKE_CH_RANDOM_OFFSET + i] != TLS13_TLS10_DOWNGRADE_MARKER_MAGIC[i - 24])
+            {
+                downgrade_11 = 0;
+            }
         }
     }
 
@@ -549,12 +561,32 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
         if (json)
             printf(",\n\"hello_retry_request\": \"1\"");
         else
-            printf("Hello Retry Request Found\n");
+            printf("Hello Retry Request found\n");
     }
     else
     {
         if (json)
             printf(",\n\"hello_retry_request\": \"0\"");
+    }
+
+    if (downgrade_12)
+    {
+        if (json)
+            printf(",\n\"tlsv13_downgrade_marker\": \"tlsv12\"");
+        else
+            printf("TLSv1.3 to TLSv1.2 downgrade marker found\n");
+    }
+    else if (downgrade_11)
+    {
+        if (json)
+            printf(",\n\"tlsv13_downgrade_marker\": \"tlsv10\"");
+        else
+            printf("TLSv1.3 to TLSv1.1 or TLSv1.0 downgrade marker found\n");
+    }
+    else
+    {
+        if (json)
+            printf(",\n\"tlsv13_downgrade_marker\": \"none\"");
     }
 
     session_id_length = read_uint(buffer, offset + HANDSHAKE_CH_SESSION_ID_LENGTH_OFFSET, HANDSHAKE_CH_SESSION_ID_LENGTH_LEN);
