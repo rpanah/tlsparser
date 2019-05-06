@@ -304,7 +304,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int of
 
     if (pos == offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
-        fprintf(stderr, "No extensions.\n");
+        // fprintf(stderr, "No extensions.\n");
         extensions_length = 0;
     }
     else
@@ -712,7 +712,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
 
     if (pos == offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
-        fprintf(stderr, "No extensions.\n");
+        // fprintf(stderr, "No extensions.\n");
         extensions_length = 0;
     }
     else
