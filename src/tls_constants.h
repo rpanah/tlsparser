@@ -79,11 +79,43 @@
 #define TLS_1_1                 0x0302  /* 3,2 */
 #define TLS_1_2                 0x0303  /* 3,3 */
 #define TLS_1_3                 0x0304  /* 3,4 */
+
+#define TLS_1_3_DRAFT0          0x7f00
+#define TLS_1_3_DRAFT1          0x7f01
+#define TLS_1_3_DRAFT2          0x7f02
+#define TLS_1_3_DRAFT3          0x7f03
+#define TLS_1_3_DRAFT4          0x7f04
+#define TLS_1_3_DRAFT5          0x7f05
+#define TLS_1_3_DRAFT6          0x7f06
+#define TLS_1_3_DRAFT7          0x7f07
+#define TLS_1_3_DRAFT8          0x7f08
+#define TLS_1_3_DRAFT9          0x7f09
+#define TLS_1_3_DRAFT10         0x7f0a
+#define TLS_1_3_DRAFT11         0x7f0b
+#define TLS_1_3_DRAFT12         0x7f0c
+#define TLS_1_3_DRAFT13         0x7f0d
+#define TLS_1_3_DRAFT14         0x7f0e
+#define TLS_1_3_DRAFT15         0x7f0f
+#define TLS_1_3_DRAFT16         0x7f10
+#define TLS_1_3_DRAFT17         0x7f11
+#define TLS_1_3_DRAFT18         0x7f12
+#define TLS_1_3_DRAFT19         0x7f13
+#define TLS_1_3_DRAFT20         0x7f14
+#define TLS_1_3_DRAFT21         0x7f15
+#define TLS_1_3_DRAFT22         0x7f16
 #define TLS_1_3_DRAFT23         0x7f17
-#define TLS_1_3_DRAFT23_FB      0xfb17
+#define TLS_1_3_DRAFT24         0x7f18
+#define TLS_1_3_DRAFT25         0x7f19
 #define TLS_1_3_DRAFT26         0x7f1a
-#define TLS_1_3_DRAFT26_FB      0xfb1a
+#define TLS_1_3_DRAFT27         0x7f1b
 #define TLS_1_3_DRAFT28         0x7f1c
-#define TLS_1_3_DRAFT28_FB      0xfb1c
+#define TLS_1_3_FB22            0xfb16
+#define TLS_1_3_FB23            0xfb17
+#define TLS_1_3_FB26            0xfb1a
+#define TLS_1_3_FB40            0xfb28
+#define TLS_1_3_FEFD            0xfefd
+#define TLS_1_3_FEFF            0xfeff
+#define TLS_1_3_7E01            0x7e01
+#define TLS_1_3_7E02            0x7e02
 
 #endif

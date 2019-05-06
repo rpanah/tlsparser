@@ -635,23 +635,116 @@ const char *version_name(unsigned code) {
         case TLS_1_3:
             return "TLS_1_3";
             break;
+        case TLS_1_3_DRAFT0:
+            return "TLS_1_3_DRAFT0";
+            break;
+        case TLS_1_3_DRAFT1:
+            return "TLS_1_3_DRAFT1";
+            break;
+        case TLS_1_3_DRAFT2:
+            return "TLS_1_3_DRAFT2";
+            break;
+        case TLS_1_3_DRAFT3:
+            return "TLS_1_3_DRAFT3";
+            break;
+        case TLS_1_3_DRAFT4:
+            return "TLS_1_3_DRAFT4";
+            break;
+        case TLS_1_3_DRAFT5:
+            return "TLS_1_3_DRAFT5";
+            break;
+        case TLS_1_3_DRAFT6:
+            return "TLS_1_3_DRAFT6";
+            break;
+        case TLS_1_3_DRAFT7:
+            return "TLS_1_3_DRAFT7";
+            break;
+        case TLS_1_3_DRAFT8:
+            return "TLS_1_3_DRAFT8";
+            break;
+        case TLS_1_3_DRAFT9:
+            return "TLS_1_3_DRAFT9";
+            break;
+        case TLS_1_3_DRAFT10:
+            return "TLS_1_3_DRAFT10";
+            break;
+        case TLS_1_3_DRAFT11:
+            return "TLS_1_3_DRAFT11";
+            break;
+        case TLS_1_3_DRAFT12:
+            return "TLS_1_3_DRAFT12";
+            break;
+        case TLS_1_3_DRAFT13:
+            return "TLS_1_3_DRAFT13";
+            break;
+        case TLS_1_3_DRAFT14:
+            return "TLS_1_3_DRAFT14";
+            break;
+        case TLS_1_3_DRAFT15:
+            return "TLS_1_3_DRAFT15";
+            break;
+        case TLS_1_3_DRAFT16:
+            return "TLS_1_3_DRAFT16";
+            break;
+        case TLS_1_3_DRAFT17:
+            return "TLS_1_3_DRAFT17";
+            break;
+        case TLS_1_3_DRAFT18:
+            return "TLS_1_3_DRAFT18";
+            break;
+        case TLS_1_3_DRAFT19:
+            return "TLS_1_3_DRAFT19";
+            break;
+        case TLS_1_3_DRAFT20:
+            return "TLS_1_3_DRAFT20";
+            break;
+        case TLS_1_3_DRAFT21:
+            return "TLS_1_3_DRAFT21";
+            break;
+        case TLS_1_3_DRAFT22:
+            return "TLS_1_3_DRAFT22";
+            break;
         case TLS_1_3_DRAFT23:
             return "TLS_1_3_DRAFT23";
             break;
-        case TLS_1_3_DRAFT23_FB:
-            return "TLS_1_3_DRAFT23_FB";
+        case TLS_1_3_DRAFT24:
+            return "TLS_1_3_DRAFT24";
+            break;
+        case TLS_1_3_DRAFT25:
+            return "TLS_1_3_DRAFT25";
             break;
         case TLS_1_3_DRAFT26:
             return "TLS_1_3_DRAFT26";
             break;
-        case TLS_1_3_DRAFT26_FB:
-            return "TLS_1_3_DRAFT26_FB";
+        case TLS_1_3_DRAFT27:
+            return "TLS_1_3_DRAFT27";
             break;
         case TLS_1_3_DRAFT28:
             return "TLS_1_3_DRAFT28";
             break;
-        case TLS_1_3_DRAFT28_FB:
-            return "TLS_1_3_DRAFT28_FB";
+        case TLS_1_3_FB22:
+            return "TLS_1_3_FB22";
+            break;
+        case TLS_1_3_FB23:
+            return "TLS_1_3_FB23";
+            break;
+        case TLS_1_3_FB26:
+            return "TLS_1_3_FB26";
+            break;
+        case TLS_1_3_FB40:
+            return "TLS_1_3_FB40";
+            break;
+        case TLS_1_3_FEFD:
+            return "TLS_1_3_FEFD";
+            break;
+        case TLS_1_3_FEFF:
+            return "TLS_1_3_FEFF";
+            break;
+        case TLS_1_3_7E01:
+            return "TLS_1_3_7E01";
+            break;
+        case TLS_1_3_7E02:
+            return "TLS_1_3_7E02";
             break;
         case 0x0a0a:
         case 0x1a1a:
