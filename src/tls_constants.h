@@ -79,5 +79,11 @@
 #define TLS_1_1                 0x0302  /* 3,2 */
 #define TLS_1_2                 0x0303  /* 3,3 */
 #define TLS_1_3                 0x0304  /* 3,4 */
+#define TLS_1_3_DRAFT23         0x7f17
+#define TLS_1_3_DRAFT23_FB      0xfb17
+#define TLS_1_3_DRAFT26         0x7f1a
+#define TLS_1_3_DRAFT26_FB      0xfb1a
+#define TLS_1_3_DRAFT28         0x7f1c
+#define TLS_1_3_DRAFT28_FB      0xfb1c
 
 #endif

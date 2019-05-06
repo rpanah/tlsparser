@@ -317,8 +317,7 @@ void parse_ch_psk_key_exchange_modes(char *data, unsigned offset, unsigned lengt
         }
         if (json)
         {
-            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"]", name, mode_code);
-            printf("\"}");
+            printf("{\"name\": \"%s\", \"id\": \"%#.4x\"}", name, mode_code);
         }
         else
         {
@@ -635,6 +634,24 @@ const char *version_name(unsigned code) {
             break;
         case TLS_1_3:
             return "TLS_1_3";
+            break;
+        case TLS_1_3_DRAFT23:
+            return "TLS_1_3_DRAFT23";
+            break;
+        case TLS_1_3_DRAFT23_FB:
+            return "TLS_1_3_DRAFT23_FB";
+            break;
+        case TLS_1_3_DRAFT26:
+            return "TLS_1_3_DRAFT26";
+            break;
+        case TLS_1_3_DRAFT26_FB:
+            return "TLS_1_3_DRAFT26_FB";
+            break;
+        case TLS_1_3_DRAFT28:
+            return "TLS_1_3_DRAFT28";
+            break;
+        case TLS_1_3_DRAFT28_FB:
+            return "TLS_1_3_DRAFT28_FB";
             break;
         case 0x0a0a:
         case 0x1a1a:
