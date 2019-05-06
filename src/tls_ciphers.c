@@ -435,6 +435,12 @@ char *cipher_name(unsigned code)
             return "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256";
         case 0xc02a:
             return "TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384";
+        case 0x00fb:
+            return "TLS_RSA_WITH_HC_128_CBC_MD5";
+        case 0x00fc:
+            return "TLS_RSA_WITH_HC_128_CBC_SHA";
+        case 0x00fd:
+            return "TLS_RSA_WITH_RABBIT_CBC_SHA";
         case 0x00ff:
             return "TLS_EMPTY_RENEGOTIATION_INFO_SCSV";
         case 0xc02b:
