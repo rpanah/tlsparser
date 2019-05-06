@@ -848,6 +848,18 @@ const char *sigalg_name(unsigned code) {
             return "TLS13_ED448";
             break;
 
+        case TLSEXT_SIGALG_RSA_PSS_PSS_SHA256:
+            return "RSA_PSS_PSS_SHA256";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PSS_PSS_SHA384:
+            return "RSA_PSS_PSS_SHA384";
+            break;
+
+        case TLSEXT_SIGALG_RSA_PSS_PSS_SHA512:
+            return "RSA_PSS_PSS_SHA512";
+            break;
+
         case  TLSEXT_SIGALG_RSA_PSS_SHA256:
             return "RSA_PSS_SHA256";
             break;
