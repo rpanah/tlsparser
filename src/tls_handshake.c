@@ -302,7 +302,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int of
         return NULL;
     }
 
-    if (pos - offset + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN > record_length)
+    if (pos == offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
         fprintf(stderr, "No extensions.\n");
         extensions_length = 0;
@@ -313,7 +313,7 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int of
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    if (extensions_end != offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
+    if (extensions_length != 0 && extensions_end != offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
         fprintf(stderr, "WARNING! Extensions end doesn't match buffer end (pos: %u, offset: %u, extensions_end: %u, extensions_length: %u, record_length: %u, handshake_length: %u).\n", pos, offset, extensions_end, extensions_length, record_length, handshake_length);
         extensions_length = 0;
@@ -710,7 +710,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
         return NULL;
     }
 
-    if (pos - offset + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN > record_length)
+    if (pos == offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
         fprintf(stderr, "No extensions.\n");
         extensions_length = 0;
@@ -721,7 +721,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
     extensions_start = extensions_pos + HANDSHAKE_CH_EXTENSIONS_LENGTH_LEN;
     extensions_end = extensions_start + extensions_length;
 
-    if (extensions_end != offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
+    if (extensions_length != 0 && extensions_end != offset + handshake_length + HANDSHAKE_MESSAGE_OFFSET)
     {
         fprintf(stderr, "WARNING! Extensions end doesn't match buffer end (pos: %u, offset: %u, extensions_end: %u, extensions_length: %u, record_length: %u, handshake_length: %u).\n", pos, offset, extensions_end, extensions_length, record_length, handshake_length);
         extensions_length = 0;
