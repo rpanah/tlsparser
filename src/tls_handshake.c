@@ -126,6 +126,8 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int of
     unsigned extensions_length = 0;
     unsigned extensions_start = 0;
     unsigned extensions_end = 0;
+    
+    const char *tls_version_string = NULL;
 
     tls_version = read_uint(buffer, offset + HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
 
@@ -173,24 +175,15 @@ struct hadnshake_client_hello *process_handshake_client_hello(void *data, int of
     else
         printf("TLS version: ");
 
-    switch (tls_version)
+    tls_version_string = version_name(tls_version);
+    
+    if (tls_version_string != NULL)
     {
-        case SSL_3_0:
-            printf("SSLv3");
-            break;
-        case TLS_1_0:
-            printf("TLSv1.0");
-            break;
-        case TLS_1_1:
-            printf("TLSv1.1");
-            break;
-        case TLS_1_2:
-            printf("TLSv1.2");
-            break;
-        case TLS_1_3:
-            printf("TLSv1.3");
-        default:
-            printf("unknown (%d)", tls_version);
+      printf("%s", tls_version_string);
+    }
+    else
+    {
+      printf("unknown (%d)", tls_version);
     }
     if (json)
         printf("\"");
@@ -521,6 +514,7 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
     int hello_retry_request = 1;
     int downgrade_12 = 1;
     int downgrade_11 = 1;
+    const char *tls_version_string = NULL;
 
     tls_version = read_uint(buffer, offset + HANDSHAKE_CH_VERSION_OFFSET, HANDSHAKE_CH_VERSION_LEN);
 
@@ -619,23 +613,17 @@ struct hadnshake_server_hello *process_handshake_server_hello(void *data, int of
     else
         printf("TLS version: ");
 
-    switch (tls_version)
+    tls_version_string = version_name(tls_version);
+    
+    if (tls_version_string != NULL)
     {
-        case SSL_3_0:
-            printf("SSLv3");
-            break;
-        case TLS_1_0:
-            printf("TLSv1.0");
-            break;
-        case TLS_1_1:
-            printf("TLSv1.1");
-            break;
-        case TLS_1_2:
-            printf("TLSv1.2");
-            break;
-        default:
-            printf("unknown (%d)", tls_version);
+      printf("%s", tls_version_string);
     }
+    else
+    {
+      printf("unknown (%d)", tls_version);
+    }
+
     if (json)
         printf("\",");
     else

@@ -119,6 +119,10 @@ const char *extension_name(unsigned code)
             return "CACHED_INFO";
             break;
 
+        case EXT_COMPRESS_CERTIFICATE:
+            return "COMPRESS_CERTIFICATE";
+            break;
+
         case EXT_SESSION_TICKET_TLS:
             return "SESSION_TICKET_TLS";
             break;
@@ -734,11 +738,11 @@ const char *version_name(unsigned code) {
         case TLS_1_3_FB40:
             return "TLS_1_3_FB40";
             break;
-        case TLS_1_3_FEFD:
-            return "TLS_1_3_FEFD";
+        case DTLS_1_0:
+            return "DTLS_1_0";
             break;
-        case TLS_1_3_FEFF:
-            return "TLS_1_3_FEFF";
+        case DTLS_1_1:
+            return "DTLS_1_1";
             break;
         case TLS_1_3_7E01:
             return "TLS_1_3_7E01";

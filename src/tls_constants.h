@@ -113,9 +113,12 @@
 #define TLS_1_3_FB23            0xfb17
 #define TLS_1_3_FB26            0xfb1a
 #define TLS_1_3_FB40            0xfb28
-#define TLS_1_3_FEFD            0xfefd
-#define TLS_1_3_FEFF            0xfeff
 #define TLS_1_3_7E01            0x7e01
 #define TLS_1_3_7E02            0x7e02
+
+#define DTLS_1_0                0xfeff
+#define DTLS_1_1                0xfefd
+
+const char *get_tls_version_string(unsigned int version);
 
 #endif

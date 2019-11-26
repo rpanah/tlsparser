@@ -11,6 +11,7 @@
 #include <string.h>
 #include <glib.h>
 #include "tls_constants.h"
+#include "tls_extensions.h"
 #include "tls_handshake.h"
 #include "utils.h"
 #include "x509_cert.h"
@@ -35,6 +36,7 @@ int main(int argc, char **argv)
     unsigned int record_length = 0;
     unsigned int handshake_type = 0;
     unsigned int offset = 0;
+    const char *tls_version_string = NULL;
 
     for (i = 1; i < argc; i++)
     {
@@ -133,45 +135,24 @@ int main(int argc, char **argv)
                 printf("\n");
             }
         }
-    
+
         if (json)
             printf("\"tls_version\": \"");
         else
             printf("TLS version: ");
 
-        switch (version)
+        tls_version_string = version_name(version);
+        if (tls_version_string != NULL)
         {
-            case SSL_3_0:
-                printf("SSLv3");
-                if (json)
-                    printf("\"");
-                break;
-            case TLS_1_0:
-                printf("TLSv1.0");
-                if (json)
-                    printf("\"");
-                break;
-            case TLS_1_1:
-                printf("TLSv1.1");
-                if (json)
-                    printf("\"");
-                break;
-            case TLS_1_2:
-                printf("TLSv1.2");
-                if (json)
-                    printf("\"");
-                break;
-            case TLS_1_3:
-                printf("TLSv1.3");
-                if (json)
-                    printf("\"");
-                break;
-            default:
-                printf("unknown (%d)", version);
-                if (json)
-                    printf("\"");
+            printf("%s", tls_version_string);
+        }
+        else
+        {
+            printf("unknown (%d)", version);
         }
 
+        if (json)
+            printf("\"");
 
         if (!json)
             printf("\nRecord length: %u\n", record_length);
